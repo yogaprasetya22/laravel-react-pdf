@@ -259,7 +259,7 @@ export default function Laporan({ formValues, handleFormChange }) {
                                                 />
                                                 <button
                                                     type="button"
-                                                    className="px-2 bg-red-500 text-white rounded-md absolute right-0 -top-3 -top-3"
+                                                    className="px-2 bg-red-500 text-white rounded-md absolute right-0 -top-3 "
                                                     onClick={() =>
                                                         remove(index)
                                                     }

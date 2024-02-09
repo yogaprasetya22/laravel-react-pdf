@@ -25,36 +25,37 @@ export default function MyPdf({ data }) {
             >
                 <View style={tw("w-full flex justify-start -ml-4")}>
                     <View style={tw("flex flex-col max-w-[20rem]")}>
-                        <Text style={tw("text-sm text-center font-bold ")}>
+                        <Text style={tw("text-sm text-center font-bold")}>
                             KEPOLISIAN NEGARA REPUBLIK INDONESIA DARAH BALI
                         </Text>
-                        <Text style={tw("text-sm font-bold  text-center")}>
+                        <Text style={tw("text-sm font-bold text-center")}>
                             RESOR BANDUNG
                         </Text>
                         <Text style={tw("border-b border-black")}></Text>
                     </View>
                 </View>
-                <View style={tw("w-full flex  justify-center")}>
-                    <View style={tw("flex flex-col items-center gap-2 ")}>
+                <View style={tw("w-full flex justify-center")}>
+                    <View style={tw("flex flex-col items-center gap-2")}>
                         <Image
                             src={LogoPolri}
                             style={tw("w-[6rem] h-[6rem]")}
                         />
-                        <View style={tw("flex flex-col gap-2 items-center ")}>
+                        <View style={tw("flex flex-col gap-2 items-center")}>
                             <Text style={tw("text-sm text-center font-bold")}>
                                 SURAT PERINTAH
                             </Text>
                             <Text
                                 style={tw(
-                                    " text-sm text-center font-bold border-t border-black pt-2"
+                                    "text-sm text-center font-bold border-t border-black pt-2"
                                 )}
                             >
-                                Nomor Sprin /177/vI/TUK.7.1.2/2023
+                                Nomor Sprin /177/vI/TUK.7.1.2/
+                                {moment().format("YYYY")}
                             </Text>
                         </View>
                     </View>
                 </View>
-                <View style={tw("w-full flex  flex-col gap-1")}>
+                <View style={tw("w-full flex flex-col gap-1")}>
                     <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
@@ -70,7 +71,7 @@ export default function MyPdf({ data }) {
                             </View>
                         </View>
                     </View>
-                    <View style={tw("w-full flex flex-col gap-2 ")}>
+                    <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
                                 <Text style={tw("text-sm")}>Dasar</Text>
@@ -84,7 +85,7 @@ export default function MyPdf({ data }) {
                                         <View
                                             key={index}
                                             style={tw(
-                                                "w-full p-2 flex flex-row break-words"
+                                                "w-full p-2 flex flex-row"
                                             )}
                                         >
                                             <Text style={tw("text-sm pr-1")}>
@@ -103,7 +104,7 @@ export default function MyPdf({ data }) {
                         </View>
                     </View>
                     <View style={tw("w-full flex justify-center py-2")}>
-                        <View style={tw("flex flex-col items-center ")}>
+                        <View style={tw("flex flex-col items-center")}>
                             <Text style={tw("text-sm text-center font-bold")}>
                                 DIPERINTAHKAN
                             </Text>
@@ -123,10 +124,10 @@ export default function MyPdf({ data }) {
                                 >
                                     {data.kepada.nama && (
                                         <>
-                                            {data.kepada.nama},
-                                            {data.kepada.pangkat},
-                                            {data.kepada.nrp},
-                                            {data.kepada.jabatan},
+                                            {data.kepada.nama},{" "}
+                                            {data.kepada.pangkat},{" "}
+                                            {data.kepada.nrp},{" "}
+                                            {data.kepada.jabatan},{" "}
                                             {data.kepada.keterangan}
                                         </>
                                     )}
@@ -134,7 +135,7 @@ export default function MyPdf({ data }) {
                             </View>
                         </View>
                     </View>
-                    <View style={tw("w-full flex flex-col gap-2 ")}>
+                    <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
                                 <Text style={tw("text-sm")}>Dasar</Text>
@@ -148,7 +149,7 @@ export default function MyPdf({ data }) {
                                         <View
                                             key={index}
                                             style={tw(
-                                                "w-full p-2 flex flex-row break-words"
+                                                "w-full p-2 flex flex-row"
                                             )}
                                         >
                                             <Text style={tw("text-sm pr-1")}>

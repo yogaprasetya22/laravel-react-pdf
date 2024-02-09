@@ -42,7 +42,16 @@ class Client extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $file = $request->file('file');
+        $fileName = $request->fileName; // Mendapatkan nama file yang diinginkan dari React
+
+        // Simpan file blob ke direktori public/laporan dengan nama yang diinginkan
+        $file->storeAs('public/laporan', $fileName);
+
+        // Kembalikan respons JSON
+        return response()->json([
+            'message' => 'Laporan berhasil di kirim'
+        ], 200);
     }
 
     /**

@@ -29,6 +29,7 @@ Route::get('/fail404', function () {
 
 Route::prefix('/')->middleware(['auth', 'role:2', 'verified'])->group(function () {
     Route::get('/', [Client::class, 'index'])->name('client');
+    Route::post('/post/laporan', [Client::class, 'store'])->name('post.laporan');
     Route::get('/render/pdf', [Client::class, 'render'])->name('render.pdf');
 });
 

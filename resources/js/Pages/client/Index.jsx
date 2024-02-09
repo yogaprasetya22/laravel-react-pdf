@@ -5,13 +5,22 @@ import { useState } from "react";
 import ReactToPrint from "react-to-print";
 import Laporan from "@/Components/Form/Laporan";
 import MyPdf, { tw } from "@/Components/Pdf";
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import { useForm } from "@inertiajs/react";
+import { BlobProvider, PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
-
+import axios from "axios";
+// post.laporan;
 export default function Index({ title, auth }) {
-    const [formValues, setFormValues] = useState({
+    const {
+        data: formValues,
+        setData: setFormValues,
+        post,
+        processing,
+        errors,
+        reset,
+    } = useForm({
         pertimbangan: "",
         dasar: [""],
         kepada: {
@@ -59,18 +68,30 @@ export default function Index({ title, auth }) {
         setFormValues(values); // Set nilai formValues sesuai dengan values yang diperbarui
     };
 
-    const sendToServer = async (data, blob) => {
+    const sendToServer = (data, blob) => {
         const { pertimbangan, dasar, kepada, untuk } = data;
-        // const formData = new FormData();
-        // formData.append("file", blob);
-        // formData.append("pertimbangan", pertimbangan);
-        // formData.append("dasar", JSON.stringify(dasar));
-        // formData.append("kepada", JSON.stringify(kepada));
-        // formData.append("untuk", JSON.stringify(untuk));
-        // const response = await fetch("/api/laporan", {
-        //     method: "POST",
-        //     body: formData,
-        // });
+        const formData = new FormData();
+        formData.append("pertimbangan", pertimbangan);
+        formData.append("dasar", JSON.stringify(dasar));
+        formData.append("kepada", JSON.stringify(kepada));
+        formData.append("untuk", JSON.stringify(untuk));
+        formData.append("file", blob);
+        formData.append(
+            "fileName",
+            `laporan-${auth?.user.name}-${moment().format("DD-MM-YYYY")}.pdf`
+        );
+
+        axios
+            .post("/post/laporan", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+            .then((res) => {
+               if(res.status === 200){
+                   reset();
+               }
+            });
     };
     return (
         <Layout title={title} user={auth?.user}>
@@ -88,13 +109,29 @@ export default function Index({ title, auth }) {
                 </div>
                 <div className="w-full" ref={kananRef}>
                     {/* <PdfTamplate data={formValues} pdfRef={pdRef} /> */}
-                    <PDFViewer width="100%" height="800px">
+                    <PDFViewer width="100%" height="800px" showToolbar={false}>
                         <MyPdf data={formValues} />
                     </PDFViewer>
                 </div>
             </div>
             <div className="flex justify-end fixed bottom-2 right-0">
-                <PDFDownloadLink
+                {/* <PDFDownloadLink
+                    document={<MyPdf data={formValues} />}
+                    fileName={`laporan-${auth?.user.name}-${moment().format(
+                        "DD-MM-YYYY"
+                    )}.pdf`}
+                    // download={false}
+                >
+                    {({ blob, url, loading, error }) => (
+                        <button
+                            onClick={() => sendToServer(formValues, blob)}
+                            className="btn hover:bg-green-400 rounded-md bg-blue-500 font-extrabold text-white "
+                        >
+                            {loading ? "Loading document..." : "Simpan"}
+                        </button>
+                    )}
+                </PDFDownloadLink> */}
+                <BlobProvider
                     document={<MyPdf data={formValues} />}
                     fileName={`laporan-${auth?.user.name}-${moment().format(
                         "DD-MM-YYYY"
@@ -108,7 +145,7 @@ export default function Index({ title, auth }) {
                             {loading ? "Loading document..." : "Simpan"}
                         </button>
                     )}
-                </PDFDownloadLink>
+                </BlobProvider>
             </div>
         </Layout>
     );
