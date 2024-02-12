@@ -49,8 +49,8 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                     href={`/${validateHeader(user?.role_id)}`}
                     className="flex flex-row items-center text-3xl "
                 >
-                    <span className=" text-black font-extrabold">BEA</span>
-                    <span className="text-green-600 font-extrabold">SISWA</span>
+                    <span className=" text-black font-extrabold">App</span>
+                    <span className="text-green-600 font-extrabold">Form</span>
                 </Link>
             </div>
 

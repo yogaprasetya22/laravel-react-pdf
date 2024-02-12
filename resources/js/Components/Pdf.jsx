@@ -113,7 +113,7 @@ export default function MyPdf({ data }) {
                     <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
-                                <Text style={tw("text-sm")}>Pertimbangan</Text>
+                                <Text style={tw("text-sm")}>Kepada</Text>
                             </View>
                             <View style={tw("w-3 py-2 px-1")}>
                                 <Text style={tw("text-sm")}>:</Text>
@@ -138,7 +138,7 @@ export default function MyPdf({ data }) {
                     <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
-                                <Text style={tw("text-sm")}>Dasar</Text>
+                                <Text style={tw("text-sm")}>Untuk</Text>
                             </View>
                             <View style={tw("w-3 py-2 px-1")}>
                                 <Text style={tw("text-sm")}>:</Text>
@@ -206,6 +206,22 @@ export default function MyPdf({ data }) {
                                     NRP. 123456789
                                 </Text>
                             </View>
+                        </View>
+                    </View>
+                    <View style={tw("flex justify-start -mt-[2.5rem]")}>
+                        <View style={tw("flex flex-col items-start")}>
+                            <Text style={tw("text-sm font-bold text-center")}>
+                                TEMBUSAN
+                            </Text>
+                            <Text style={tw("text-sm font-bold text-center")}>
+                                1. Kapolres Bandung
+                            </Text>
+                            <Text style={tw("text-sm font-bold text-center")}>
+                                2. Kabag Ops Polres Bandung
+                            </Text>
+                            <Text style={tw("text-sm font-bold text-center underline")}>
+                                3. Kasi Propam Polres Bandung
+                            </Text>
                         </View>
                     </View>
                 </View>

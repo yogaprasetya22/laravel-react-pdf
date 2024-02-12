@@ -88,9 +88,9 @@ export default function Index({ title, auth }) {
                 },
             })
             .then((res) => {
-               if(res.status === 200){
-                   reset();
-               }
+                if (res.status === 200) {
+                    reset();
+                }
             });
     };
     return (
