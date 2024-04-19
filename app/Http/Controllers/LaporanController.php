@@ -155,9 +155,35 @@ class LaporanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function search(Request $request)
     {
-        //
+        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'untuk', 'surat_perintah'])
+            ->where('uuid', $request->search)
+            ->orWhere('uuid_user', $request->search)
+            ->orWhereHas('no_sprin', function ($query) use ($request) {
+                $query->where('kode', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('pertimbangan', function ($query) use ($request) {
+                $query->where('pertimbangan', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('dasar', function ($query) use ($request) {
+                $query->where('dasar', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('kepada', function ($query) use ($request) {
+                $query->where('nama', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('untuk', function ($query) use ($request) {
+                $query->where('untuk', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('surat_perintah', function ($query) use ($request) {
+                $query->where('berlaku', 'like', '%' . $request->search . '%');
+            })
+            ->orWhereHas('surat_perintah', function ($query) use ($request) {
+                $query->where('hingga', 'like', '%' . $request->search . '%');
+            })
+            ->get();
+
+        return response()->json($laporan);
     }
 
     /**

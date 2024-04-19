@@ -79,9 +79,9 @@ export default function TabelHistory({ data }) {
                     </div>
                     {/* add member */}
                     <div className="flex items-center gap-2 px-5 py-3">
-                        <button className="btn bg-green-400">
+                        <Link href="/laporan" className="btn bg-green-400 text-white">
                             <i className="fas fa-plus"></i> Add Member
-                        </button>
+                        </Link>
                     </div>
                 </div>{" "}
                 <table className="table">

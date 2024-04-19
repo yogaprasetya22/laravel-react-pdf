@@ -77,7 +77,7 @@ class ClientController extends Controller
     }
     public function feedback()
     {
-        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback'])->whereHas('user', function ($query) {
+        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback.status',])->whereHas('user', function ($query) {
             $query->where('uuid', Auth::user()->uuid);
         })->whereHas('feedback', function ($query) {
             $query->where('feedback', '!=', null);
@@ -165,9 +165,15 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function search(Request $request)
     {
-        //
+        $user = User::with(['role'])->where('role_id', 2)
+            ->where('name', 'like', '%' . $request->search . '%')
+            ->where('email', 'like', '%' . $request->search . '%')
+            ->where('no_telp', 'like', '%' . $request->search . '%')
+            ->where('alamat', 'like', '%' . $request->search . '%')
+            ->latest()->get();
+        return response()->json($user);
     }
 
     /**

@@ -171,9 +171,15 @@ class AdminController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function search(Request $request)
     {
-        //
+        $user = User::with(['role'])->where('role_id', 2)
+            ->where('name', 'like', '%' . $request->search . '%')
+            ->where('email', 'like', '%' . $request->search . '%')
+            ->where('no_telp', 'like', '%' . $request->search . '%')
+            ->where('alamat', 'like', '%' . $request->search . '%')
+            ->latest()->get();
+        return response()->json($user);
     }
 
     /**
