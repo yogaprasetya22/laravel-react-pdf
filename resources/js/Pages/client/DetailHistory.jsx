@@ -174,7 +174,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
                                 {loading ? "Loading document..." : "Simpan"}
                             </button>
                             <ConfirmationModal
-                                message="Apakah anda yakin ingin menyimpan laporan?"
+                                message="Apakah anda yakin ingin update laporan?"
                                 onConfirm={() => sendToServer(formValues, blob)}
                             />
                         </>

@@ -1,11 +1,5 @@
 import React, { useEffect } from "react";
-import {
-    Formik,
-    Field,
-    Form,
-    FieldArray,
-    ErrorMessage,
-} from "formik";
+import { Formik, Field, Form, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FildArrayTextAreas } from "@/Components/Form/FormExample";
 
@@ -391,7 +385,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 />
                             </div>
                             <label className="text-md text-center font-semibold">
-                               s.d
+                                s.d
                             </label>
                             <div className="flex flex-col gap-2">
                                 <Field

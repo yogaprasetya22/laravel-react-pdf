@@ -2,14 +2,14 @@ import React from "react";
 
 export default function ConfirmationModal({ message, onConfirm }) {
     return (
-        <dialog id="my_modal_1" className="modal backdrop-blur-sm">
+        <dialog id="my_modal_1" className="modal backdrop-blur-sm backdrop-brightness-75 shadow-lg">
             <div className="modal-box w-2/4 max-w-5xl overflow">
                 <div className=" w-full flex flex-col gap-5">
                     <div className="text-center">
                         <h1 className="text-2xl font-bold">Konfirmasi</h1>
                     </div>
                     <div className="text-center">
-                        <p>{message}</p>
+                        <p className="text-md font-extrabold">{message}</p>
                     </div>
                     <div className="flex justify-center gap-5">
                         <button
