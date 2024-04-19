@@ -37,7 +37,7 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
     return (
         <Layout>
             <div className="w-full flex  flex-row gap-5 justify-between">
-                <div className=" w-[80%] h-auto bg-white flex flex-col gap-5 p-5">
+                <div className=" w-[60%] h-auto bg-white flex flex-col gap-5 p-5 shadow-md">
                     <div className="flex flex-row justify-between ">
                         <div className="flex flex-col gap-5">
                             <h1 className="text-2xl font-bold">
@@ -66,7 +66,7 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                         </div>
                     </div>
                     <div className="flex flex-col gap-10">
-                        <div className="flex flex-row gap-2">
+                        <div className="flex flex-row gap-3">
                             <div className="flex flex-col gap-5">
                                 <p className="text-md">Nama</p>
                                 <p className="text-md">Email</p>
@@ -74,13 +74,25 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                                 <p className="text-md">Alamat</p>
                             </div>
                             <div className="flex flex-col gap-5">
-                                <p className="text-md">: {data.user.name}</p>
-                                <p className="text-md">: {data.user.email}</p>
-                                <p className="text-md">: {data.user.no_telp}</p>
-                                <p className="text-md">: {data.user.alamat}</p>
+                                <p className="text-md text-center">:</p>
+                                <p className="text-md text-center">:</p>
+                                <p className="text-md text-center">:</p>
+                                <p className="text-md text-center">:</p>
+                            </div>
+                            <div className="flex flex-col gap-5">
+                                <p className="text-md truncate w-[10rem]">
+                                    {data.user.name}
+                                </p>
+                                <p className="text-md truncate w-[10rem]">
+                                    {data.user.email}
+                                </p>
+                                <p className="text-md">{data.user.no_telp}</p>
+                                <p className="text-md truncate w-[10rem]">
+                                    {data.user.alamat}
+                                </p>
                             </div>
                         </div>
-                        <div className="flex flex-row gap-7">
+                        <div className="flex flex-row gap-3">
                             <div className="flex flex-col gap-5">
                                 <p className="text-md">Nomor Sprin</p>
                                 <p className="text-md">Berlaku</p>
@@ -88,20 +100,24 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                                 <p className="text-md">Status</p>
                             </div>
                             <div className="flex flex-col gap-5">
+                                <p className="text-md">:</p>
+                                <p className="text-md">:</p>
+                                <p className="text-md">:</p>
+                                <p className="text-md">:</p>
+                            </div>
+                            <div className="flex flex-col gap-5">
                                 <p className="text-md">
-                                    : {data.nomor_sprin.kode}/
+                                    {data.nomor_sprin.kode}/
                                     {data.nomor_sprin.unit}/
                                     {data.nomor_sprin.kategori}/
                                     {data.nomor_sprin.tahun}
                                 </p>
                                 <p className="text-md">
-                                    :{" "}
                                     {moment(data.surat_perintah.berlaku).format(
                                         "LL"
                                     )}
                                 </p>
                                 <p className="text-md">
-                                    :{" "}
                                     {moment(data.surat_perintah.hingga).format(
                                         "LL"
                                     )}
@@ -111,21 +127,23 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                            
                             `}
                                 >
-                                    :{" "}
                                     <p
                                         className={` p-1 rounded-md text-white shadow-md ${
-                                            laporan?.feedback?.status_id === 1
+                                            data?.feedback?.status_id === 1
                                                 ? "bg-blue-500"
-                                                : laporan?.feedback
-                                                      ?.status_id === 2
+                                                : data?.feedback?.status_id ===
+                                                  2
                                                 ? "bg-green-500"
-                                                : laporan?.feedback
-                                                      ?.status_id === 3
+                                                : data?.feedback?.status_id ===
+                                                  3
                                                 ? "bg-red-500"
-                                                : ""
+                                                : "bg-blue-500"
                                         }`}
                                     >
-                                        {laporan?.feedback?.status?.name_status}
+                                        {data?.feedback?.status?.name_status
+                                            ? data?.feedback?.status
+                                                  ?.name_status
+                                            : "tertunda"}
                                     </p>
                                 </div>
                             </div>
