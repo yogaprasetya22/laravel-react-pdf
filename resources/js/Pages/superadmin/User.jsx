@@ -10,12 +10,14 @@ import Create from "@/Components/modal/User/Create";
 import Update from "@/Components/modal/User/Update";
 import Delete from "@/Components/modal/User/Delete";
 
-export default function User({ data }) {
+export default function User({ data: data_user }) {
+    const [data, setData] = useState(data_user);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
+    const [search, setSearch] = useState("");
     const [dataModal, setDataModal] = useState([]);
 
     useEffect(() => {
@@ -40,6 +42,18 @@ export default function User({ data }) {
         const newOffset = (event.selected * page) % data.length;
 
         setItemOffset(newOffset);
+    };
+
+    const searchData = () => {
+        const filteredData = data_user.filter((item) => {
+            return (
+                item.name.toLowerCase().includes(search.toLowerCase()) ||
+                item.email.toLowerCase().includes(search.toLowerCase()) ||
+                item.no_telp.toLowerCase().includes(search.toLowerCase()) ||
+                item.alamat.toLowerCase().includes(search.toLowerCase())
+            );
+        });
+        setData(filteredData);
     };
 
     return (
@@ -73,8 +87,13 @@ export default function User({ data }) {
                                     type="text"
                                     className="input input-bordered"
                                     placeholder="Search"
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
                                 />
-                                <button className="btn">
+                                <button
+                                    className="btn"
+                                    onClick={() => searchData()}
+                                >
                                     <i className="fas fa-search"></i>{" "}
                                 </button>
                             </div>

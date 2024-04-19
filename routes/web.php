@@ -32,16 +32,17 @@ Route::get('/fail404', function () {
 Route::prefix('/')->middleware(['auth', 'role:2', 'verified'])->group(function () {
     Route::get('/', [ClientController::class, 'index'])->name('ClientController');
     Route::get('/laporan', [ClientController::class, 'laporan'])->name('client.laporan');
+    Route::delete('/laporan', [LaporanController::class, 'destroy'])->name('client.laporan.destroy');
     Route::get('/history', [ClientController::class, 'history'])->name('client.history');
     Route::get('/history/{uuid}', [ClientController::class, 'history_detail'])->name('client.history_detail');
     Route::get('/feedback', [ClientController::class, 'feedback'])->name('client.feedback');
     Route::get('/feedback/{uuid}', [ClientController::class, 'feedback_detail'])->name('client.feedback_detail');
     Route::get('/render/pdf', [ClientController::class, 'render'])->name('render.pdf');
-    Route::resource('laporan', LaporanController::class)->only(['store', 'destroy']);
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin');
+    Route::get('/detail/{uuid}', [AdminController::class, 'detail_dashboard'])->name('admin.detail');
     Route::get('/aproval', [AdminController::class, 'aproval'])->name('admin.aproval');
     Route::post('/aproval', [AdminController::class, 'aproval_post'])->name('admin.aproval.post');
     Route::get('/aproval/{uuid}', [AdminController::class, 'detail_aproval'])->name('admin.detail_aproval');
@@ -69,6 +70,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // laporan
+    Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
+    Route::post('/laporan', [LaporanController::class, 'update'])->name('laporan.update');
+    Route::delete('/laporan', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 });
 
 require __DIR__ . '/auth.php';

@@ -1,4 +1,5 @@
 import Layout from "@/Layouts/Layout";
+import { Link } from "@inertiajs/react";
 import moment from "moment";
 import "moment/locale/id";
 moment.locale("id");
@@ -13,6 +14,7 @@ export default function Index({ data: data_table }) {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
     const [page, setPage] = useState(5);
 
     useEffect(() => {
@@ -82,6 +84,25 @@ export default function Index({ data: data_table }) {
         const newOffset = (event.selected * page) % currentData.length;
 
         setItemOffset(newOffset);
+    };
+
+    const searchData = () => {
+        const filteredData = data_table.filter((item) => {
+            return (
+                item.user.name.toLowerCase().includes(search.toLowerCase()) ||
+                item.no_sprin.kode
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.unit
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.kategori
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+            );
+        });
+        setData(filteredData);
     };
 
     return (
@@ -217,25 +238,25 @@ export default function Index({ data: data_table }) {
                             <div className="flex gap-2 px-5 py-3 items-center">
                                 <button
                                     onClick={handleSortStatusAll}
-                                    className="btn rounded-md bg-yellow-500/70 text-white btn-md"
+                                    className="btn rounded-md text-xs px-2 py-1 bg-yellow-500/70 text-white btn-md"
                                 >
                                     All
                                 </button>
                                 <button
                                     onClick={handleSortStatusPanding}
-                                    className="btn rounded-md bg-blue-500/70 text-white btn-md"
+                                    className="btn rounded-md text-xs px-2 py-1 bg-blue-500/70 text-white btn-md"
                                 >
                                     Tertunda
                                 </button>
                                 <button
                                     onClick={handleSortStatusApproved}
-                                    className="btn rounded-md bg-green-500/70 text-white btn-md"
+                                    className="btn rounded-md text-xs px-2 py-1 bg-green-500/70 text-white btn-md"
                                 >
                                     DiSetujui
                                 </button>
                                 <button
                                     onClick={handleSortStatusRejected}
-                                    className="btn rounded-md bg-red-500/70 text-white btn-md"
+                                    className="btn rounded-md text-xs px-2 py-1 bg-red-500/70 text-white btn-md"
                                 >
                                     Ditolak
                                 </button>{" "}
@@ -270,6 +291,23 @@ export default function Index({ data: data_table }) {
                                             Desember
                                         </option>
                                     </select>
+                                </div>
+                                <div className="flex flex-row items-center justify-center gap-1">
+                                    <input
+                                        type="text"
+                                        className="input input-bordered max-w-[10rem]"
+                                        placeholder="Search"
+                                        value={search}
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
+                                    />
+                                    <button
+                                        className="btn"
+                                        onClick={() => searchData()}
+                                    >
+                                        <i className="fas fa-search"></i>{" "}
+                                    </button>
                                 </div>
                             </div>
                             <div className="flex justify-normal items-center py-5">
@@ -367,7 +405,7 @@ export default function Index({ data: data_table }) {
                                                         ?.name_status
                                                         ? item?.feedback?.status
                                                               ?.name_status
-                                                        : "panding"}
+                                                        : "tertunda"}
                                                 </p>
                                             </div>
                                         </td>

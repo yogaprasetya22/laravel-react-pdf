@@ -33,6 +33,54 @@ class AdminController extends Controller
             'data' => $laporan,
         ]);
     }
+    public function detail_dashboard($uuid)
+    {
+        $laporan = Laporan::with([
+            'user',
+            'no_sprin',
+            'pertimbangan',
+            'dasar',
+            'kepada',
+            'untuk',
+            'surat_perintah',
+            'feedback.status',
+        ])->where('uuid', $uuid)->first();
+
+        $result = collect([
+            'nomor_sprin' => [
+                'kode' => $laporan->no_sprin->kode,
+                'unit' => $laporan->no_sprin->unit,
+                'kategori' => $laporan->no_sprin->kategori,
+                'tahun' => $laporan->no_sprin->tahun,
+            ],
+            'pertimbangan' => $laporan->pertimbangan->pertimbangan,
+            'dasar' => collect($laporan->dasar)->pluck('dasar'),
+            'kepada' => collect($laporan->kepada)->map(function ($item) {
+                return [
+                    'nama' => $item->nama,
+                    'pangkat' => $item->pangkat,
+                    'nrp' => $item->nrp,
+                    'jabatan' => $item->jabatan,
+                    'keterangan' => $item->keterangan,
+                ];
+            }),
+            'untuk' => collect($laporan->untuk)->pluck('untuk'),
+            'surat_perintah' => [
+                'berlaku' => $laporan->surat_perintah->berlaku,
+                'hingga' => $laporan->surat_perintah->hingga,
+            ],
+            'user' => $laporan->user,
+            'feedback' => $laporan->feedback,
+        ]);
+
+        $tamplate = Template::first();
+
+        return Inertia::render('admin/DetailDashboard', [
+            'title' => 'Admin Dahsboard',
+            'data' => $result,
+            'tamplate' => $tamplate,
+        ]);
+    }
 
     public function aproval()
     {

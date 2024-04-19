@@ -8,6 +8,7 @@ import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
 import ConfirmationModal from "@/Components/modal/ConfirmationModal";
+import { toast } from "react-toastify";
 
 export default function Laporan({ auth, tamplate }) {
     const {
@@ -87,6 +88,12 @@ export default function Laporan({ auth, tamplate }) {
         post(route("laporan.store"), {
             preserveScroll: true,
             onSuccess: () => {
+                toast(
+                    "Berhasil menyimpan laporan, silahkan cek laporan di menu history!",
+                    {
+                        toastId: "customId",
+                    }
+                );
                 reset();
             },
         });

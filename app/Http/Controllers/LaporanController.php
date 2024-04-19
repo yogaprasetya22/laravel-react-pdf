@@ -197,9 +197,68 @@ class LaporanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $uuid)
+    public function update(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        // update data laporan
+        $request->validate([
+            'uuid' => 'required',
+            'nomor_sprin' => 'required',
+            'pertimbangan' => 'required',
+            'dasar' => 'required',
+            'kepada' => 'required',
+            'untuk' => 'required',
+            'surat_perintah' => 'required',
+        ]);
+
+        $laporan = Laporan::where('uuid', $request->uuid)->first();
+        $laporan->no_sprin()->update([
+            'kode' => $request->nomor_sprin['kode'],
+            'unit' => $request->nomor_sprin['unit'],
+            'kategori' => $request->nomor_sprin['kategori'],
+            'tahun' => $request->nomor_sprin['tahun'],
+        ]);
+
+        $laporan->pertimbangan()->update([
+            'pertimbangan' => $request->pertimbangan,
+        ]);
+
+        $laporan->dasar()->delete();
+        foreach ($request->dasar as $dasar) {
+            $laporan->dasar()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'dasar' => $dasar,
+            ]);
+        }
+
+        $laporan->kepada()->delete();
+        foreach ($request->kepada as $kepada) {
+            $laporan->kepada()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'nama' => $kepada['nama'],
+                'pangkat' => $kepada['pangkat'],
+                'nrp' => $kepada['nrp'],
+                'jabatan' => $kepada['jabatan'],
+                'keterangan' => $kepada['keterangan'],
+            ]);
+        }
+
+        $laporan->untuk()->delete();
+        foreach ($request->untuk as $untuk) {
+            $laporan->untuk()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'untuk' => $untuk,
+            ]);
+        }
+
+        $laporan->surat_perintah()->update([
+            'berlaku' => $request->surat_perintah['berlaku'],
+            'hingga' => $request->surat_perintah['hingga'],
+        ]);
+
+        return Redirect::back();
     }
 
     /**
@@ -213,8 +272,17 @@ class LaporanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request): \Illuminate\Http\RedirectResponse
     {
-        //
+        $laporan = Laporan::where('uuid', $request->uuid)->first();
+        $laporan->no_sprin()->delete();
+        $laporan->pertimbangan()->delete();
+        $laporan->dasar()->delete();
+        $laporan->kepada()->delete();
+        $laporan->untuk()->delete();
+        $laporan->surat_perintah()->delete();
+        $laporan->delete();
+
+        return Redirect::back();
     }
 }

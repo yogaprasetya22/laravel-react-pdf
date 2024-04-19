@@ -14,7 +14,7 @@ export const tw = createTw({
     },
 });
 
-export default function MyPdf({ data, url, tamplate }) {
+export default function MyPdf({ data, tamplate }) {
     return (
         <Document
         // onRender={(blob) => {

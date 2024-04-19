@@ -14,6 +14,7 @@ export default function Tabel({ data: data_table }) {
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
     const [page, setPage] = useState(5);
 
     // handle sort all
@@ -74,6 +75,25 @@ export default function Tabel({ data: data_table }) {
         setItemOffset(newOffset);
     };
 
+    const searchData = () => {
+        const filteredData = data_table.filter((item) => {
+            return (
+                item.user.name.toLowerCase().includes(search.toLowerCase()) ||
+                item.no_sprin.kode
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.unit
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.kategori
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+            );
+        });
+        setData(filteredData);
+    };
+
     return (
         <div className="bg-white flex flex-col gap-10 rounded-xl ">
             <div className="overflow-x-auto">
@@ -101,8 +121,13 @@ export default function Tabel({ data: data_table }) {
                                 type="text"
                                 className="input input-bordered"
                                 placeholder="Search"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
                             />
-                            <button className="btn">
+                            <button
+                                className="btn"
+                                onClick={() => searchData()}
+                            >
                                 <i className="fas fa-search"></i>{" "}
                             </button>
                         </div>
@@ -201,7 +226,7 @@ export default function Tabel({ data: data_table }) {
                                             {item?.feedback?.status?.name_status
                                                 ? item?.feedback?.status
                                                       ?.name_status
-                                                : "panding"}
+                                                : "tertunda"}
                                         </p>
                                     </div>
                                 </td>

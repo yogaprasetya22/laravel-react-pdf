@@ -1,39 +1,12 @@
 import Layout from "@/Layouts/Layout";
-import SignatureCanvas from "react-signature-canvas";
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import MyPdf from "@/Components/Pdf";
-import { useState, useRef, useEffect } from "react";
 import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
-import { useForm, usePage } from "@inertiajs/react";
 
-export default function DetailFeedback({ data, tamplate, laporan }) {
-    const [sign, setSign] = useState(null);
-    const [url, setUrl] = useState(null);
-    const {
-        data: formatValue,
-        setData,
-        post,
-        processing,
-        errors,
-        reset,
-    } = useForm({
-        feedback: "",
-        laporan_uuid: laporan.uuid,
-        url: "",
-        status_id: "1",
-    });
-
-    useEffect(() => {
-        setData({
-            feedback: laporan?.feedback?.feedback || "",
-            laporan_uuid: laporan?.uuid || "",
-            url: laporan?.url || "",
-            status_id: laporan?.feedback?.status_id || "1",
-        });
-    }, [data]);
-
+export default function DetailDashboard({ data, tamplate }) {
+    console.log(data);
     return (
         <Layout>
             <div className="w-full flex  flex-row gap-5 justify-between">
@@ -41,17 +14,13 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                     <div className="flex flex-row justify-between ">
                         <div className="flex flex-col gap-5">
                             <h1 className="text-2xl font-bold">
-                                Detail Feedback
+                                Detail Dashboard
                             </h1>
                         </div>
                         <div className="flex flex-col gap-5">
                             <PDFDownloadLink
                                 document={
-                                    <MyPdf
-                                        tamplate={tamplate}
-                                        data={data}
-                                        url={url}
-                                    />
+                                    <MyPdf tamplate={tamplate} data={data} />
                                 }
                                 fileName="laporan.pdf"
                             >
@@ -105,7 +74,7 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                                     {moment(data.surat_perintah.hingga).format(
                                         "LL"
                                     )}
-                                </p>
+                                </p>{" "}
                                 <div
                                     className={`text-md flex flex-row items-center gap-2
                            
@@ -114,21 +83,34 @@ export default function DetailFeedback({ data, tamplate, laporan }) {
                                     :{" "}
                                     <p
                                         className={` p-1 rounded-md text-white shadow-md ${
-                                            laporan?.feedback?.status_id === 1
+                                            data?.feedback?.status_id === 1
                                                 ? "bg-blue-500"
-                                                : laporan?.feedback
-                                                      ?.status_id === 2
+                                                : data?.feedback?.status_id ===
+                                                  2
                                                 ? "bg-green-500"
-                                                : laporan?.feedback
-                                                      ?.status_id === 3
+                                                : data?.feedback?.status_id ===
+                                                  3
                                                 ? "bg-red-500"
-                                                : ""
+                                                : "bg-blue-500"
                                         }`}
                                     >
-                                        {laporan?.feedback?.status?.name_status}
+                                        {data?.feedback?.status?.name_status
+                                            ? data?.feedback?.status
+                                                  ?.name_status
+                                            : "tertunda"}
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div className="w-full flex justify-end">
+                        <div className="flex w-1/5 gap-3 justify-between">
+                            <button
+                                className="btn hover:bg-red-400/85 rounded-md bg-red-500 font-extrabold text-white"
+                                onClick={() => window.history.back()}
+                            >
+                                Back
+                            </button>
                         </div>
                     </div>
                 </div>
