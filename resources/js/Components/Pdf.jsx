@@ -9,18 +9,17 @@ import { createTw } from "react-pdf-tailwind";
 export const tw = createTw({
     theme: {
         fontFamily: {
-            sans: ["Comic Sans"],
+            sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
         },
     },
 });
 
-export default function MyPdf({ data }) {
-
+export default function MyPdf({ data, url, tamplate }) {
     return (
         <Document
-            // onRender={(blob) => {
-            //     console.log(blob._INTERNAL__LAYOUT__DATA_.children);
-            // }}
+        // onRender={(blob) => {
+        //     console.log(blob._INTERNAL__LAYOUT__DATA_.children);
+        // }}
         >
             <Page
                 size="A4"
@@ -30,11 +29,19 @@ export default function MyPdf({ data }) {
             >
                 <View style={tw("w-full flex justify-start -ml-4")}>
                     <View style={tw("flex flex-col max-w-[20rem]")}>
-                        <Text style={tw("text-sm text-center font-bold")}>
-                            KEPOLISIAN NEGARA REPUBLIK INDONESIA DARAH BALI
+                        <Text
+                            style={tw(
+                                "text-sm text-center font-bold uppercase"
+                            )}
+                        >
+                            {tamplate?.title === "" ? "..." : tamplate?.title}
                         </Text>
-                        <Text style={tw("text-sm font-bold text-center")}>
-                            RESOR BANDUNG
+                        <Text
+                            style={tw(
+                                "text-sm font-bold text-center uppercase"
+                            )}
+                        >
+                            {data?.polres === "" ? "..." : data?.polres}
                         </Text>
                         <Text style={tw("border-b border-black")}></Text>
                     </View>
@@ -54,13 +61,28 @@ export default function MyPdf({ data }) {
                                     "text-sm text-center font-bold border-t border-black pt-2"
                                 )}
                             >
-                                Nomor Sprin /177/vI/TUK.7.1.2/
-                                {moment().format("YYYY")}
+                                Nomor Sprin /
+                                {data?.nomor_sprin?.kode
+                                    ? data?.nomor_sprin?.kode
+                                    : "..."}
+                                /
+                                {data?.nomor_sprin?.unit
+                                    ? data?.nomor_sprin?.unit
+                                    : "..."}
+                                /
+                                {data?.nomor_sprin?.kategori
+                                    ? data?.nomor_sprin?.kategori
+                                    : "..."}
+                                /
+                                {data?.nomor_sprin?.tahun
+                                    ? data?.nomor_sprin?.tahun
+                                    : "..."}
+                                .
                             </Text>
                         </View>
                     </View>
                 </View>
-                <View style={tw("w-full flex flex-col gap-1")}>
+                <View style={tw("w-full flex flex-col gap-3")}>
                     <View style={tw("w-full flex flex-col gap-2")}>
                         <View style={tw("flex flex-row")}>
                             <View style={tw("w-[8rem] px-1 py-2")}>
@@ -71,7 +93,7 @@ export default function MyPdf({ data }) {
                             </View>
                             <View style={tw("w-full p-2")}>
                                 <Text style={tw("text-sm text-justify")}>
-                                    {data.pertimbangan && data.pertimbangan}
+                                    {data?.pertimbangan && data?.pertimbangan}.
                                 </Text>
                             </View>
                         </View>
@@ -84,13 +106,13 @@ export default function MyPdf({ data }) {
                             <View style={tw("w-3 py-2 px-1")}>
                                 <Text style={tw("text-sm")}>:</Text>
                             </View>
-                            <View style={tw("w-full flex flex-col")}>
-                                {data.dasar[0] != "" &&
-                                    data.dasar.map((item, index) => (
+                            <View style={tw("w-full flex flex-col pt-1")}>
+                                {data?.dasar[0] != "" &&
+                                    data?.dasar.map((item, index) => (
                                         <View
                                             key={index}
                                             style={tw(
-                                                "w-full p-2 flex flex-row"
+                                                "w-full px-2 py-1 flex flex-row"
                                             )}
                                         >
                                             <Text style={tw("text-sm pr-1")}>
@@ -101,7 +123,7 @@ export default function MyPdf({ data }) {
                                                     "text-sm text-justify pr-4"
                                                 )}
                                             >
-                                                {item}
+                                                {item}.
                                             </Text>
                                         </View>
                                     ))}
@@ -123,20 +145,36 @@ export default function MyPdf({ data }) {
                             <View style={tw("w-3 py-2 px-1")}>
                                 <Text style={tw("text-sm")}>:</Text>
                             </View>
-                            <View style={tw("w-full p-2")}>
-                                <Text
-                                    style={tw("text-sm text-justify uppercase")}
-                                >
-                                    {data.kepada.nama && (
-                                        <>
-                                            {data.kepada.nama},{" "}
-                                            {data.kepada.pangkat},{" "}
-                                            {data.kepada.nrp},{" "}
-                                            {data.kepada.jabatan},{" "}
-                                            {data.kepada.keterangan}
-                                        </>
-                                    )}
-                                </Text>
+                            <View style={tw("w-full flex flex-col")}>
+                                {data?.kepada.length &&
+                                    data?.kepada.map((item, index) => (
+                                        <View
+                                            style={tw(
+                                                "w-full px-2 py-1 flex flex-row"
+                                            )}
+                                            key={index}
+                                        >
+                                            {" "}
+                                            <Text style={tw("text-sm pr-1")}>
+                                                {index + 1}.
+                                            </Text>
+                                            <Text
+                                                style={tw(
+                                                    "text-sm text-justify uppercase"
+                                                )}
+                                            >
+                                                {item.nama != "" && (
+                                                    <>
+                                                        {item.nama},{" "}
+                                                        {item.pangkat},{" "}
+                                                        {item.nrp},{" "}
+                                                        {item.jabatan},{" "}
+                                                        {item.keterangan}.
+                                                    </>
+                                                )}
+                                            </Text>
+                                        </View>
+                                    ))}
                             </View>
                         </View>
                     </View>
@@ -148,27 +186,110 @@ export default function MyPdf({ data }) {
                             <View style={tw("w-3 py-2 px-1")}>
                                 <Text style={tw("text-sm")}>:</Text>
                             </View>
-                            <View style={tw("w-full flex flex-col")}>
-                                {data.untuk[0] != "" &&
-                                    data.untuk.map((item, index) => (
+                            <View style={tw("w-full flex flex-col pt-1")}>
+                                {data?.untuk.length && (
+                                    <>
+                                        {data?.untuk[0] != "" &&
+                                            data?.untuk.map((item, index) => (
+                                                <View
+                                                    key={index}
+                                                    style={tw(
+                                                        "w-full px-2 py-1 flex flex-row"
+                                                    )}
+                                                >
+                                                    <Text
+                                                        style={tw(
+                                                            "text-sm pr-1"
+                                                        )}
+                                                    >
+                                                        {index + 1}.
+                                                    </Text>
+                                                    <Text
+                                                        style={tw(
+                                                            "text-sm text-justify pr-4"
+                                                        )}
+                                                    >
+                                                        {item}.
+                                                    </Text>
+                                                </View>
+                                            ))}
                                         <View
-                                            key={index}
                                             style={tw(
-                                                "w-full p-2 flex flex-row"
+                                                "w-full px-2 py-1 flex flex-row"
                                             )}
                                         >
                                             <Text style={tw("text-sm pr-1")}>
-                                                {index + 1}.
+                                                {data?.untuk.length + 1}.
                                             </Text>
                                             <Text
                                                 style={tw(
                                                     "text-sm text-justify pr-4"
                                                 )}
                                             >
-                                                {item}
+                                                surat perintah ini berlaku sejak
+                                                tanggal{" "}
+                                                {data?.surat_perintah.berlaku
+                                                    ? moment(
+                                                          data?.surat_perintah
+                                                              .berlaku
+                                                      ).format("LL")
+                                                    : "..."}{" "}
+                                                s.d.{" "}
+                                                {data?.surat_perintah.berlaku
+                                                    ? moment(
+                                                          data?.surat_perintah
+                                                              .hingga
+                                                      ).format("LL")
+                                                    : "..."}{" "}
+                                                .
                                             </Text>
                                         </View>
-                                    ))}
+                                        <View
+                                            style={tw(
+                                                "w-full px-2 py-1 flex flex-row"
+                                            )}
+                                        >
+                                            <Text style={tw("text-sm pr-1")}>
+                                                {data?.untuk.length + 2}.
+                                            </Text>
+                                            <Text
+                                                style={tw(
+                                                    "text-sm text-justify pr-4"
+                                                )}
+                                            >
+                                                melaksanakan perintah ini dengan
+                                                seksama dan penuh tanggung
+                                                jawab.
+                                            </Text>
+                                        </View>
+                                        <View
+                                            style={tw(
+                                                "w-full px-2 py-1 flex flex-row"
+                                            )}
+                                        >
+                                            <Text style={tw("text-sm pr-1")}>
+                                                {data?.untuk.length + 3}.
+                                            </Text>
+                                            <Text
+                                                style={tw(
+                                                    "text-sm text-justify pr-4"
+                                                )}
+                                            >
+                                                sebelum dan sesudah melaksanakan
+                                                surat perintah ini melaporkan
+                                                kepada{" "}
+                                                {tamplate?.tujuan_laporan === ""
+                                                    ? "..."
+                                                    : tamplate?.tujuan_laporan}{" "}
+                                                Polres{" "}
+                                                {tamplate?.polres === ""
+                                                    ? "..."
+                                                    : tamplate?.polres}
+                                                .
+                                            </Text>
+                                        </View>
+                                    </>
+                                )}{" "}
                             </View>
                         </View>
                     </View>
@@ -180,35 +301,59 @@ export default function MyPdf({ data }) {
                         </View>
                     </View>
                     <View style={tw("flex w-full flex-row justify-end pt-4")}>
-                        <View style={tw("flex flex-col items-start gap-5")}>
+                        <View style={tw("flex flex-col items-start gap-14")}>
                             <View style={tw("flex flex-col gap-1")}>
                                 <Text style={tw("text-sm font-bold")}>
-                                    Dikeluarkan di : Bandung
+                                    Dikeluarkan di :{" "}
+                                    {tamplate?.polres === ""
+                                        ? "..."
+                                        : tamplate?.polres}
                                 </Text>
                                 <View style={tw("flex flex-row gap-3")}>
                                     <Text style={tw("text-sm font-bold")}>
                                         Pada Tanggal :
                                     </Text>
-                                    <Text
-                                        style={tw(
-                                            "underline text-sm font-bold"
-                                        )}
-                                    >
+                                    <Text style={tw("text-sm font-bold")}>
                                         {moment(new Date()).format("LL")}
                                     </Text>
                                 </View>
+                                <Text
+                                    style={tw("border-b border-black")}
+                                ></Text>
+                                <Text style={tw("text-sm font-bold uppercase")}>
+                                    {tamplate?.nama_unit === ""
+                                        ? "..."
+                                        : tamplate?.nama_unit}
+                                </Text>
                             </View>
-                            <Text style={tw("text-sm font-bold uppercase")}>
-                                Kepala Kepolisian Resor Bandung
-                            </Text>
+                            {/* {url && (
+                                <View
+                                    style={tw(
+                                        "w-full flex justify-center items-center"
+                                    )}
+                                >
+                                    <Image
+                                        src={url}
+                                        style={tw("w-[7rem] h-[3.5rem]")}
+                                    />
+                                </View>
+                            )} */}
                             <View style={tw("flex flex-col gap-1")}>
-                                <View style={tw("text-sm font-bold")}>
-                                    <Text style={tw("underline")}>
-                                        Irjen Pol. Drs. Asep Saepudin
+                                <View style={tw("flex flex-col")}>
+                                    <Text style={tw("text-sm font-bold")}>
+                                        {tamplate?.pemimpin_unit === ""
+                                            ? "..."
+                                            : tamplate?.pemimpin_unit}
                                     </Text>
+                                    <Text
+                                        style={tw("border-b border-black")}
+                                    ></Text>
                                 </View>
                                 <Text style={tw("text-sm font-bold")}>
-                                    NRP. 123456789
+                                    NRP.{" "}
+                                    {tamplate?.nrp_pemimpin_unit === ""
+                                        ? "..."
+                                        : tamplate?.nrp_pemimpin_unit}
                                 </Text>
                             </View>
                         </View>
@@ -219,18 +364,30 @@ export default function MyPdf({ data }) {
                                 TEMBUSAN
                             </Text>
                             <Text style={tw("text-sm font-bold text-center")}>
-                                1. Kapolres Bandung
+                                1.{" "}
+                                {tamplate?.tembusan_1 === ""
+                                    ? "..."
+                                    : tamplate?.tembusan_1}
                             </Text>
                             <Text style={tw("text-sm font-bold text-center")}>
-                                2. Kabag Ops Polres Bandung
+                                2.{" "}
+                                {tamplate?.tembusan_2 === ""
+                                    ? "..."
+                                    : tamplate?.tembusan_2}
                             </Text>
-                            <Text
-                                style={tw(
-                                    "text-sm font-bold text-center underline"
-                                )}
-                            >
-                                3. Kasi Propam Polres Bandung
-                            </Text>
+                            <View style={tw("flex flex-col gap-1")}>
+                                <Text
+                                    style={tw("text-sm font-bold text-center")}
+                                >
+                                    3.{" "}
+                                    {tamplate?.tembusan_3 === ""
+                                        ? "..."
+                                        : tamplate?.tembusan_3}
+                                </Text>
+                                <Text
+                                    style={tw("border-b border-black")}
+                                ></Text>
+                            </View>
                         </View>
                     </View>
                 </View>

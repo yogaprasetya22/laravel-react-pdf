@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('laporans', function (Blueprint $table) {
-            $table->uuid()->unique()->index();
+            $table->uuid('uuid')->primary();
             $table->foreignId('user_id');
             $table->string('uuid_user');
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

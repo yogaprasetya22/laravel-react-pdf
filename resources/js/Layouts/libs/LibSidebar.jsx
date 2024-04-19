@@ -12,9 +12,19 @@ export const MenuDashboardValidate = (user) => {
             url: `/${validateRole(user?.role_id)}/aproval`,
             icon: "fas fa-check",
         },
+        {
+            name: "User",
+            url: `/${validateRole(user?.role_id)}/user`,
+            icon: "fas fa-users",
+        },
+        {
+            name: "Tamplate",
+            url: `/${validateRole(user?.role_id)}/tamplate`,
+            icon: "fas fa-file",
+        },
     ];
 
-    const MenuMahasiswaDashboard = [
+    const MenuClientDashboard = [
         {
             name: "Dashboard",
             url: "/",
@@ -30,12 +40,37 @@ export const MenuDashboardValidate = (user) => {
             url: "/history",
             icon: "fas fa-history",
         },
+        {
+            name: "Feedback",
+            url: "/feedback",
+            icon: "fas fa-exchange-alt",
+        },
+    ];
+
+    const MenuSuperAdminDashboard = [
+        {
+            name: "Dashboard",
+            url: "/superadmin",
+            icon: "fas fa-th-large",
+        },
+        {
+            name: "Client",
+            url: "/superadmin/client",
+            icon: "fas fa-users",
+        },
+        {
+            name: "Admin",
+            url: "/superadmin/admin",
+            icon: "fas fa-users",
+        },
     ];
 
     switch (user?.role_id) {
         case 1:
             return MenuAdminDashboard;
         case 2:
-            return MenuMahasiswaDashboard;
+            return MenuClientDashboard;
+        case 3:
+            return MenuSuperAdminDashboard;
     }
 };

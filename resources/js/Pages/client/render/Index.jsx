@@ -11,17 +11,6 @@ export default function Index({ title, auth }) {
                     height="500px"
                     className="overflow_type"
                 ></iframe>
-                {/* <PDFViewer width="100%" height="800px">
-
-                </PDFViewer>
-                <PDFDownloadLink
-                    document={<MyPdf />}
-                    fileName={`laporan-${new Date().toLocaleDateString()}.pdf`}
-                >
-                    {({ blob, url, loading, error }) =>
-                        loading ? "Loading document..." : "Download now!"
-                    }
-                </PDFDownloadLink> */}
             </div>
         </Layout>
     );

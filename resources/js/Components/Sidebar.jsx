@@ -1,16 +1,36 @@
 import { MenuDashboardValidate } from "@/Layouts/libs/LibSidebar";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import React, { useState, useEffect } from "react";
 
 const Sidebar = ({ isSidebarOpen, user }) => {
+    const { auth } = usePage().props;
     const [OpenDropdown, setOpenDropdown] = useState({
         dropdown1: false,
         dropdown2: false,
     });
     const MenuDashboard = MenuDashboardValidate(user);
+    const path = window.location.pathname;
+
+    let relevantPath;
+
+    if (auth?.user?.role_id !== 2) {
+        if (path.includes("/") && path.split("/").length > 2) {
+            const segments = path.split("/");
+            relevantPath = `/${segments[1]}/${segments[2]}`;
+        } else {
+            relevantPath = window.location.pathname;
+        }
+    } else {
+        if (path.includes("/")) {
+            const segments = path.split("/");
+            relevantPath = `/${segments[1]}`;
+        } else {
+            relevantPath = window.location.pathname;
+        }
+    }
     return (
         <aside
-            className={`h-screen lg:w-80 shadow-md  w-[100%] lg:relative absolute z-10 ${
+            className={`h-screen lg:w-80 shadow-md w-[100%] lg:relative absolute z-10 ${
                 isSidebarOpen
                     ? "transform translate-x-0 "
                     : "lg:translate-x-0  transform -translate-x-full"
@@ -29,8 +49,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
                                         >
                                             <li
                                                 className={`font-medium w-full rounded-md text-gray-700 p-2 flex gap-2 items-center select-none ${
-                                                    menu.url ===
-                                                    window.location.pathname
+                                                    menu.url === relevantPath
                                                         ? "text-white  bg-green-500"
                                                         : "hover:text-black hover:bg-blue-gray-200"
                                                 }`}

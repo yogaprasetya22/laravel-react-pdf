@@ -1,191 +1,345 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
+import LogoPolri from "../../../public/logo_polri.png";
 import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
+import { createTw } from "react-pdf-tailwind";
 
-export default function PdfTamplate({ data }) {
+export const tw = createTw({
+    theme: {
+        fontFamily: {
+            sans: ["Helvetica Neue", "Helvetica", "Arial", "sans-serif"],
+        },
+    },
+});
+
+export default function PdfTamplate({ data, url }) {
     return (
-        <div className="w-full py-5 pl-14 pr-10 flex flex-col gap-5 bg-white ">
-            {/* heading */}
-            <div className="w-full flex justify-start -ml-4">
-                <div className="flex flex-col">
-                    <div className="text-sm text-center font-bold max-w-[20rem]">
-                        KEPOLISIAN NEGARA REPUBLIK INDONESIA DARAH BALI
-                    </div>
-                    <div className="text-sm font-bold  text-center">
-                        RESOR BANDUNG
-                    </div>
-                    <div className="border-b border-black "></div>
-                </div>
-            </div>
-
-            {/* header */}
-            <div className="w-full flex  justify-center ">
-                <div className="flex flex-col items-center gap-2">
-                    <img
-                        src="logo_polri.png"
-                        alt="logo_polri"
-                        className="w-[5rem] h-[5rem]"
-                    />
-                    <div className="flex flex-col">
-                        <div className="text-center font-bold text-sm ">
-                            SURAT PERINTAH
-                        </div>
-                        <div className="border-b border-black "></div>
-                        <div className="text-center font-bold text-sm">
-                            Nomor Sprin /177/vI/TUK.7.1.2/2023
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* body */}
-            <div className="table w-full space-y-3">
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm">
-                            Pertimbangan
-                        </div>
-                        <div className="table-cell p-2 font-bold text-sm pr-7">
-                            :
-                        </div>
-                        <div className="table-cell text-sm font-bold text-justify">
-                            {data.pertimbangan && data.pertimbangan}
-                        </div>
-                    </div>
-                </div>
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm">
-                            Dasar
-                        </div>
-                        <div className="table-cell p-2 font-bold text-sm pr-7">
-                            :
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            {data.dasar[0] != "" &&
-                                data.dasar.map((item, index) => (
-                                    <ul
-                                        key={index}
-                                        className="flex flex-row gap-2"
-                                    >
-                                        <li className="text-sm font-bold text-justify">
-                                            {index + 1}.
-                                        </li>
-                                        <li className="text-sm font-bold text-justify">
-                                            {item}
-                                        </li>
-                                    </ul>
-                                ))}
-                        </div>
-                    </div>
-                </div>
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm"></div>
-                        <div className="table-cell p-1 font-bold text-sm"></div>
-                        <div className="table-cell p-1 font-bold text-sm text-center pr-32">
-                            DIPERINTAHKAN
-                        </div>
-                    </div>
-                </div>
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm">
-                            Kepada
-                        </div>
-                        <div className="table-cell p-2 font-bold text-sm pr-7">
-                            :
-                        </div>
-                        <div className="table-cell text-sm font-bold text-justify uppercase">
-                            {data.kepada.nama && (
-                                <>
-                                    {data.kepada.nama},{data.kepada.pangkat},
-                                    {data.kepada.nrp},{data.kepada.jabatan},
-                                    {data.kepada.keterangan}
-                                </>
+        <Document
+        // onRender={(blob) => {
+        //     console.log(blob._INTERNAL__LAYOUT__DATA_.children);
+        // }}
+        >
+            <Page
+                size="A4"
+                style={tw(
+                    "w-full py-7 pl-14 pr-10 flex flex-col gap-5 bg-white"
+                )}
+            >
+                <View style={tw("w-full flex justify-start -ml-4")}>
+                    <View style={tw("flex flex-col max-w-[20rem]")}>
+                        <Text
+                            style={tw(
+                                "text-sm text-center font-bold uppercase text-green-600"
                             )}
-                        </div>
-                    </div>
-                </div>
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm">
-                            Untuk
-                        </div>
-                        <div className="table-cell p-2 font-bold text-sm pr-7">
-                            :
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            {data.untuk[0] != "" &&
-                                data.untuk.map((item, index) => (
-                                    <ul
+                        >
+                            {data?.title === "" ? "..." : data?.title}
+                        </Text>
+                        <Text
+                            style={tw(
+                                "text-sm font-bold text-center uppercase text-green-600"
+                            )}
+                        >
+                            Polres {data?.polres === "" ? "..." : data?.polres}
+                        </Text>
+                        <Text style={tw("border-b border-black")}></Text>
+                    </View>
+                </View>
+                <View style={tw("w-full flex justify-center")}>
+                    <View style={tw("flex flex-col items-center gap-2")}>
+                        <Image
+                            src={LogoPolri}
+                            style={tw("w-[6rem] h-[6rem]")}
+                        />
+                        <View style={tw("flex flex-col gap-2 items-center")}>
+                            <Text style={tw("text-sm text-center font-bold")}>
+                                SURAT PERINTAH
+                            </Text>
+                            <Text
+                                style={tw(
+                                    "text-sm text-center font-bold border-t border-black pt-2"
+                                )}
+                            >
+                                __ client __
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+                <View style={tw("w-full flex flex-col gap-1")}>
+                    <View style={tw("w-full flex flex-col gap-2")}>
+                        <View style={tw("flex flex-row")}>
+                            <View style={tw("w-[8rem] px-1 py-2")}>
+                                <Text style={tw("text-sm")}>Pertimbangan</Text>
+                            </View>
+                            <View style={tw("w-3 py-2 px-1")}>
+                                <Text style={tw("text-sm")}>:</Text>
+                            </View>
+                            <View style={tw("w-full p-2")}>
+                                <Text style={tw("text-sm text-justify")}>
+                                    __ client __
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("w-full flex flex-col gap-2")}>
+                        <View style={tw("flex flex-row")}>
+                            <View style={tw("w-[8rem] px-1 py-2")}>
+                                <Text style={tw("text-sm")}>Dasar</Text>
+                            </View>
+                            <View style={tw("w-3 py-2 px-1")}>
+                                <Text style={tw("text-sm")}>:</Text>
+                            </View>
+                            <View style={tw("w-full flex flex-col pt-1")}>
+                                {new Array(1).fill(0).map((item, index) => (
+                                    <View
                                         key={index}
-                                        className="flex flex-row gap-2"
+                                        style={tw(
+                                            "w-full px-2 py-1 flex flex-row"
+                                        )}
                                     >
-                                        <li className="text-sm font-bold text-justify">
+                                        <Text style={tw("text-sm pr-1")}>
                                             {index + 1}.
-                                        </li>
-                                        <li className="text-sm font-bold text-justify">
-                                            {item}
-                                        </li>
-                                    </ul>
+                                        </Text>
+                                        <Text
+                                            style={tw(
+                                                "text-sm text-justify pr-4"
+                                            )}
+                                        >
+                                            __ client __
+                                        </Text>
+                                    </View>
                                 ))}
-                        </div>
-                    </div>
-                </div>
-                <div className="table-row-group">
-                    <div className="table-row">
-                        <div className="table-cell p-1 font-bold text-sm">
-                            Selesai
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* footer */}
-            <div className="flex justify-end">
-                <div className="flex flex-col items-start gap-5">
-                    <div className="flex flex-col gap-1">
-                        <div className="text-sm font-bold">
-                            Dikeluarkan di : Bandung
-                        </div>
-                        <div className="text-sm font-bold">
-                            Pada Tanggal :{" "}
-                            <span className="underline">
-                                {moment(data.tanggal).format("LL")}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="text-sm font-bold uppercase">
-                        Kepala Kepolisian Resor Bandung
-                    </div>
-                    <div className="flex flex-col gap-1">
-                        <div className="text-sm font-bold">
-                            <span className="underline">
-                                Irjen Pol. Drs. Asep Saepudin
-                            </span>
-                        </div>
-                        <div className="text-sm font-bold">NRP. 123456789</div>
-                    </div>
-                </div>
-            </div>
-            <div className="flex justify-start -mt-[5rem]">
-                <div className="flex flex-col items-start">
-                    <div className="text-sm font-bold text-center">
-                        TEMBUSAN
-                    </div>
-                    <div className="text-sm font-bold text-center">
-                        1. Kapolres Bandung
-                    </div>
-                    <div className="text-sm font-bold text-center">
-                        2. Kabag Ops Polres Bandung
-                    </div>
-                    <div className="text-sm font-bold text-center">
-                        3. Kasi Propam Polres Bandung
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("w-full flex justify-center py-2")}>
+                        <View style={tw("flex flex-col items-center")}>
+                            <Text style={tw("text-sm text-center font-bold")}>
+                                DIPERINTAHKAN
+                            </Text>
+                        </View>
+                    </View>
+                    <View style={tw("w-full flex flex-col gap-2")}>
+                        <View style={tw("flex flex-row")}>
+                            <View style={tw("w-[8rem] px-1 py-2")}>
+                                <Text style={tw("text-sm")}>Kepada</Text>
+                            </View>
+                            <View style={tw("w-3 py-2 px-1")}>
+                                <Text style={tw("text-sm")}>:</Text>
+                            </View>
+                            <View style={tw("w-full flex flex-col")}>
+                                {new Array(1).fill(0).map((item, index) => (
+                                    <View style={tw("w-full p-2")} key={index}>
+                                        <Text
+                                            style={tw(
+                                                "text-sm text-justify uppercase"
+                                            )}
+                                        >
+                                            __ client __
+                                        </Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("w-full flex flex-col gap-2")}>
+                        <View style={tw("flex flex-row")}>
+                            <View style={tw("w-[8rem] px-1 py-2")}>
+                                <Text style={tw("text-sm")}>Untuk</Text>
+                            </View>
+                            <View style={tw("w-3 py-2 px-1")}>
+                                <Text style={tw("text-sm")}>:</Text>
+                            </View>
+                            <View style={tw("w-full flex flex-col pt-1")}>
+                                {new Array(1).fill(0).map((item, index) => (
+                                    <View
+                                        key={index}
+                                        style={tw(
+                                            "w-full px-2 py-1 flex flex-row"
+                                        )}
+                                    >
+                                        <Text style={tw("text-sm pr-1")}>
+                                            {index + 1}.
+                                        </Text>
+                                        <Text
+                                            style={tw(
+                                                "text-sm text-justify pr-4"
+                                            )}
+                                        >
+                                            __ client __
+                                        </Text>
+                                    </View>
+                                ))}
+                                <View
+                                    style={tw("w-full px-2 py-1 flex flex-row")}
+                                >
+                                    <Text style={tw("text-sm pr-1")}>2.</Text>
+                                    <Text
+                                        style={tw("text-sm text-justify pr-4")}
+                                    >
+                                        surat perintah ini berlaku sejak tanggal{" "}
+                                        __ client __ s.d. __ client __ .
+                                    </Text>
+                                </View>
+                                <View
+                                    style={tw("w-full px-2 py-1 flex flex-row")}
+                                >
+                                    <Text style={tw("text-sm pr-1")}>3.</Text>
+                                    <Text
+                                        style={tw("text-sm text-justify pr-4")}
+                                    >
+                                        melaksanakan perintah ini dengan seksama
+                                        dan penuh tanggung jawab.
+                                    </Text>
+                                </View>
+                                <View
+                                    style={tw("w-full px-2 py-1 flex flex-row")}
+                                >
+                                    <Text style={tw("text-sm pr-1")}>4.</Text>
+                                    <Text
+                                        style={tw(
+                                            "text-sm text-justify pr-4 text-green-600"
+                                        )}
+                                    >
+                                        sebelum dan sesudah melaksanakan surat
+                                        perintah ini melaporkan kepada{" "}
+                                        {data?.tujuan_laporan === ""
+                                            ? "..."
+                                            : data?.tujuan_laporan}{" "}
+                                        Polres{" "}
+                                        {data?.polres === ""
+                                            ? "..."
+                                            : data?.polres}
+                                        .
+                                    </Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("w-full flex flex-col gap-2")}>
+                        <View style={tw("flex flex-row")}>
+                            <View style={tw("w-[8rem] px-1 py-2")}>
+                                <Text style={tw("text-sm")}>Selesai</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("flex w-full flex-row justify-end pt-4")}>
+                        <View style={tw("flex flex-col items-start")}>
+                            <View style={tw("flex flex-col gap-1")}>
+                                <Text
+                                    style={tw(
+                                        "text-sm font-bold text-green-600"
+                                    )}
+                                >
+                                    Dikeluarkan di :{" "}
+                                    {data?.polres === "" ? "..." : data?.polres}
+                                </Text>
+                                <View style={tw("flex flex-row gap-3")}>
+                                    <Text style={tw("text-sm font-bold")}>
+                                        Pada Tanggal :
+                                    </Text>
+                                    <Text
+                                        style={tw(
+                                            "underline text-sm font-bold"
+                                        )}
+                                    >
+                                        {moment(new Date()).format("LL")}
+                                    </Text>
+                                </View>
+                                <Text
+                                    style={tw(
+                                        "text-sm font-bold uppercase text-green-600"
+                                    )}
+                                >
+                                    {data?.nama_unit === ""
+                                        ? "..."
+                                        : data?.nama_unit}
+                                </Text>
+                            </View>
+                            {url && (
+                                <View
+                                    style={tw(
+                                        "w-full flex justify-center items-center"
+                                    )}
+                                >
+                                    <Image
+                                        src={url}
+                                        style={tw("w-[7rem] h-[3.5rem]")}
+                                    />
+                                </View>
+                            )}
+                            <View style={tw("flex flex-col gap-1")}>
+                                <View style={tw("flex flex-col")}>
+                                    <Text
+                                        style={tw(
+                                            "text-sm font-bold text-green-600"
+                                        )}
+                                    >
+                                        {data?.pemimpin_unit === ""
+                                            ? "..."
+                                            : data?.pemimpin_unit}
+                                    </Text>
+                                    <Text
+                                        style={tw("border-b border-black")}
+                                    ></Text>
+                                </View>
+                                <Text
+                                    style={tw(
+                                        "text-sm font-bold text-green-600"
+                                    )}
+                                >
+                                    {data?.nrp_pemimpin_unit === ""
+                                        ? "..."
+                                        : data?.nrp_pemimpin_unit}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={tw("flex justify-start -mt-[2.5rem]")}>
+                        <View style={tw("flex flex-col items-start")}>
+                            <Text style={tw("text-sm font-bold text-center")}>
+                                TEMBUSAN
+                            </Text>
+                            <Text
+                                style={tw(
+                                    "text-sm font-bold text-center text-green-600"
+                                )}
+                            >
+                                1.{" "}
+                                {data?.tembusan_1 === ""
+                                    ? "..."
+                                    : data?.tembusan_1}
+                            </Text>
+                            <Text
+                                style={tw(
+                                    "text-sm font-bold text-center text-green-600"
+                                )}
+                            >
+                                2.{" "}
+                                {data?.tembusan_2 === ""
+                                    ? "..."
+                                    : data?.tembusan_2}
+                            </Text>
+                            <View style={tw("flex flex-col gap-1")}>
+                                <Text
+                                    style={tw(
+                                        "text-sm font-bold text-center text-green-600"
+                                    )}
+                                >
+                                    3.{" "}
+                                    {data?.tembusan_3 === ""
+                                        ? "..."
+                                        : data?.tembusan_3}
+                                </Text>
+                                <Text
+                                    style={tw("border-b border-black")}
+                                ></Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Page>
+        </Document>
     );
 }

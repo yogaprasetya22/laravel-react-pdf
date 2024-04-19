@@ -1,9 +1,13 @@
 import Header from "@/Components/Header";
 import Sidebar from "@/Components/Sidebar";
-import { Head, Link } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Layout({ user, children, title }) {
+export default function Layout({ children }) {
+    const { props } = usePage();
+    const user = props.auth.user;
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => {
@@ -11,8 +15,9 @@ export default function Layout({ user, children, title }) {
     };
     return (
         <>
-            {title && <Head title={title} />}
+            {props.title && <Head title={props.title} />}
             <div className="h-screen w-full overflow-hidden">
+                <ToastContainer />
                 <Header
                     user={user}
                     toggleSidebar={toggleSidebar}

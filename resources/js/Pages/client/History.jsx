@@ -1,11 +1,11 @@
-import Tabel from "@/Components/Tabel";
+import TabelHistory from "@/Components/TabelHistory";
 import Layout from "@/Layouts/Layout";
 import React from "react";
 
-export default function History({ title, auth, data }) {
+export default function History({ data }) {
     return (
-        <Layout title={title} user={auth?.user}>
-            <Tabel data={data} />
+        <Layout>
+            <TabelHistory data={data} />
         </Layout>
     );
 }

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->uuid()->unique()->index();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('no_telp');
+            $table->string('alamat');
             $table->string('password');
             $table->foreignId('role_id')->default(2);
             $table->rememberToken();

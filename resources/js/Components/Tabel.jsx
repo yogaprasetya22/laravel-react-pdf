@@ -6,13 +6,44 @@ import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
 import ConfirmationModal from "./modal/ConfirmationModal";
+import { Link } from "@inertiajs/react";
 
-export default function Tabel({ data }) {
+export default function Tabel({ data: data_table }) {
+    const [data, setData] = useState(data_table);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
     const [Loading, setLoading] = useState(false);
     const [page, setPage] = useState(5);
+
+    // handle sort all
+    const handleSortStatusAll = () => {
+        setData(data_table);
+    };
+
+    // handle sort by status panding
+    const handleSortStatusPanding = () => {
+        const filterData = data_table.filter(
+            (item) => item?.feedback === null || item?.feedback?.status_id === 1
+        );
+        setData(filterData);
+    };
+
+    // handle sort by status approved
+    const handleSortStatusApproved = () => {
+        const filterData = data_table.filter(
+            (item) => item?.feedback?.status_id === 2
+        );
+        setData(filterData);
+    };
+
+    // handle sort by status rejected
+    const handleSortStatusRejected = () => {
+        const filterData = data_table.filter(
+            (item) => item?.feedback?.status_id === 3
+        );
+        setData(filterData);
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -23,7 +54,7 @@ export default function Tabel({ data }) {
         // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
         const sortData = data
             .sort((a, b) => {
-                return a.id - b.id;
+                return new Date(b.created_at) - new Date(a.created_at);
             })
             .slice(itemOffset, endOffset);
         setCurrentItems(sortData);
@@ -43,12 +74,8 @@ export default function Tabel({ data }) {
         setItemOffset(newOffset);
     };
 
-    const handleDelete = () => {
-        window.my_modal_1.close();
-        console.log("delete");
-    };
     return (
-        <div className="bg-white flex flex-col gap-10 rounded-xl my-10">
+        <div className="bg-white flex flex-col gap-10 rounded-xl ">
             <div className="overflow-x-auto">
                 <div className="flex justify-between">
                     <div className="flex  px-5 py-3 gap-10">
@@ -60,9 +87,9 @@ export default function Tabel({ data }) {
                                 value={page}
                                 onChange={(e) => setPage(e.target.value)}
                             >
-                                {new Array(5).fill(0).map((item, index) => (
-                                    <option key={index} value={index + 1}>
-                                        {index + 1}
+                                {[5, 10, 15, 20].map((item) => (
+                                    <option key={item} value={item}>
+                                        {item}
                                     </option>
                                 ))}
                             </select>{" "}
@@ -80,10 +107,31 @@ export default function Tabel({ data }) {
                             </button>
                         </div>
                     </div>
-                    {/* add member */}
-                    <div className="flex items-center gap-2 px-5 py-3">
-                        <button className="btn bg-green-400">
-                            <i className="fas fa-plus"></i> Add Member
+                    {/* filter status button */}
+                    <div className="flex gap-2 px-5 py-3">
+                        <button
+                            onClick={handleSortStatusAll}
+                            className="btn rounded-md bg-yellow-500/70 text-white btn-md"
+                        >
+                            All
+                        </button>
+                        <button
+                            onClick={handleSortStatusPanding}
+                            className="btn rounded-md bg-blue-500/70 text-white btn-md"
+                        >
+                            Tertunda
+                        </button>
+                        <button
+                            onClick={handleSortStatusApproved}
+                            className="btn rounded-md bg-green-500/70 text-white btn-md"
+                        >
+                            DiSetujui
+                        </button>
+                        <button
+                            onClick={handleSortStatusRejected}
+                            className="btn rounded-md bg-red-500/70 text-white btn-md"
+                        >
+                            Ditolak
                         </button>
                     </div>
                 </div>{" "}
@@ -91,55 +139,83 @@ export default function Tabel({ data }) {
                     {/* head */}
                     <thead>
                         <tr className="font-bold text-lg text-black">
-                            <th>UUID</th>
+                            <th>No Sprin</th>
                             <th>Name</th>
-                            <th>Tanggal</th>
-                            <th>File</th>
+                            <th>Berlaku</th>
+                            <th>Hingga</th>
+                            <th>Tanggal Upload</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {/* row 1 */}
-                        {currentItems.map((item, index) => (
-                            <tr key={item.uuid}>
-                                <td>
-                                    <p className="font-bold">{item.uuid}</p>
-                                </td>
+                    {currentItems.map((item, index) => (
+                        <tbody key={item?.uuid}>
+                            <tr>
                                 <td>
                                     <p className="font-bold">
-                                        {item.user.name}
+                                        {item?.no_sprin?.kode}/
+                                        {item?.no_sprin?.unit}/
+                                        {item?.no_sprin?.kategori}/
+                                        {item?.no_sprin?.tahun}
                                     </p>
                                 </td>
                                 <td>
                                     <p className="font-bold">
-                                        {moment(item.created_at).fromNow()}
+                                        {item?.user?.name}
                                     </p>
                                 </td>
                                 <td>
-                                    <a
-                                        href={`/storage/laporan/${item.uuid}/${item.file}`}
-                                        target="_blank"
-                                        className="text-blue-500 underline"
-                                    >
-                                        {item.file}
-                                    </a>
+                                    <p className="font-bold">
+                                        {moment(
+                                            item?.surat_perintah?.berlaku
+                                        ).format("LL")}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p className="font-bold">
+                                        {moment(
+                                            item?.surat_perintah?.hingga
+                                        ).format("LL")}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p className="font-bold">
+                                        {moment(item?.created_at).fromNow()}
+                                    </p>
+                                </td>
+                                <td>
+                                    <div className="flex">
+                                        <p
+                                            className={`uppercase font-bold py-1 px-2 rounded-md text-center text-white ${
+                                                item?.feedback?.status_id === 1
+                                                    ? "bg-blue-500"
+                                                    : item?.feedback
+                                                          ?.status_id === 2
+                                                    ? "bg-green-500"
+                                                    : item?.feedback
+                                                          ?.status_id === 3
+                                                    ? "bg-red-500"
+                                                    : "bg-blue-500"
+                                            }`}
+                                        >
+                                            {item?.feedback?.status?.name_status
+                                                ? item?.feedback?.status
+                                                      ?.name_status
+                                                : "panding"}
+                                        </p>
+                                    </div>
                                 </td>
                                 <th className="flex gap-2">
-                                    {/* <button className="btn btn-ghost btn-md ">
-                                        <i className="text-green-500 text-xl fas fa-edit"></i>
-                                    </button> */}
-                                    <button
-                                        className="btn btn-ghost btn-md"
-                                        onClick={() => {
-                                            window.my_modal_1.show();
-                                        }}
+                                    <Link
+                                        href={`/admin/aproval/${item?.uuid}`}
+                                        className="btn btn-ghost btn-md "
                                     >
-                                        <i className="text-red-500 text-xl fas fa-trash-alt"></i>
-                                    </button>
+                                        <i className="text-green-500 text-xl fas fa-eye"></i>
+                                    </Link>
                                 </th>
                             </tr>
-                        ))}
-                    </tbody>{" "}
+                        </tbody>
+                    ))}
                 </table>
                 <div className="flex justify-normal items-center py-5">
                     <ReactPaginate
