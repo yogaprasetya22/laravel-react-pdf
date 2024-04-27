@@ -20,6 +20,8 @@ class Laporan extends Model
         'user_id',
         'uuid_user',
         'file',
+        'lampiran',
+        'created_at',
     ];
 
     public function user()

@@ -31,9 +31,10 @@ export default function Laporan({ auth, tamplate }) {
             {
                 nama: "",
                 pangkat: "",
+                picked: "",
                 nrp: "",
                 jabatan: "",
-                keterangan: "",
+                tugas: "",
             },
         ],
         untuk: [""],
@@ -42,6 +43,7 @@ export default function Laporan({ auth, tamplate }) {
             hingga: "",
         },
         uuid: auth?.user.uuid,
+        lampiran: "",
     });
 
     // Ref untuk mengakses fungsi print pada komponen PdfTamplate
@@ -87,14 +89,21 @@ export default function Laporan({ auth, tamplate }) {
         setFormValues({ ...formValues, file: formData });
         post(route("laporan.store"), {
             preserveScroll: true,
-            onSuccess: () => {
-                toast(
-                    "Berhasil menyimpan laporan, silahkan cek laporan di menu history!",
-                    {
-                        toastId: "customId",
-                    }
-                );
-                reset();
+            onSuccess: (e) => {
+                console.log(e);
+                // toast(
+                //     "Berhasil menyimpan laporan, silahkan cek laporan di menu history!",
+                //     {
+                //         toastId: "customId",
+                //     }
+                // );
+                // reset();
+            },
+            onError: (e) => {
+                console.log(e);
+                toast.error("Gagal menyimpan laporan, silahkan coba lagi!", {
+                    toastId: "customId",
+                });
             },
         });
     };

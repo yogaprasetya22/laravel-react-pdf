@@ -34,30 +34,33 @@ export default function DetailDashboard({ data, tamplate }) {
                         </div>
                     </div>
                     <div className="flex flex-col gap-10">
-                        <div className="flex flex-row gap-3">
-                            <div className="flex flex-col gap-5">
+                        <div className="flex flex-row gap-2">
+                            <div className="flex flex-col gap-5 pr-10">
                                 <p className="text-md">Nama</p>
                                 <p className="text-md">Email</p>
-                                <p className="text-md">Nomor Telepon</p>
-                                <p className="text-md">Alamat</p>
+                                <p className="text-md">No Telp</p>
+                                <p className="text-md">Pangkat</p>
+                                <p className="text-md">Jabatan</p>
                             </div>
                             <div className="flex flex-col gap-5">
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
+                                <p className="text-md">:</p>
                             </div>
                             <div className="flex flex-col gap-5">
                                 <p className="text-md truncate w-[10rem]">
-                                    {data.user.name}
+                                    {data.user.user.name}
                                 </p>
                                 <p className="text-md truncate w-[10rem]">
-                                    {data.user.email}
+                                    {data.user.user.email}
                                 </p>
-                                <p className="text-md">{data.user.no_telp}</p>
-                                <p className="text-md truncate w-[10rem]">
-                                    {data.user.alamat}
+                                <p className="text-md">
+                                    {data.user.user.no_telp}
                                 </p>
+                                <p className="text-md">{data.user.pangkat}</p>
+                                <p className="text-md">{data.user.jabatan}</p>
                             </div>
                         </div>
                         <div className="flex flex-row gap-3">
@@ -65,10 +68,8 @@ export default function DetailDashboard({ data, tamplate }) {
                                 <p className="text-md">Nomor Sprin</p>
                                 <p className="text-md">Berlaku</p>
                                 <p className="text-md">Hingga</p>
-                                <p className="text-md">Status</p>
-                            </div>
+                            </div>{" "}
                             <div className="flex flex-col gap-5">
-                                <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
@@ -90,30 +91,6 @@ export default function DetailDashboard({ data, tamplate }) {
                                         "LL"
                                     )}
                                 </p>
-                                <div
-                                    className={`text-md flex flex-row items-center gap-2
-                           
-                            `}
-                                >
-                                    <p
-                                        className={` p-1 rounded-md text-white shadow-md ${
-                                            data?.feedback?.status_id === 1
-                                                ? "bg-blue-500"
-                                                : data?.feedback?.status_id ===
-                                                  2
-                                                ? "bg-green-500"
-                                                : data?.feedback?.status_id ===
-                                                  3
-                                                ? "bg-red-500"
-                                                : "bg-blue-500"
-                                        }`}
-                                    >
-                                        {data?.feedback?.status?.name_status
-                                            ? data?.feedback?.status
-                                                  ?.name_status
-                                            : "tertunda"}
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </div>

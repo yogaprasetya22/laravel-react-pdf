@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->string('uuid_user');
             $table->string('file')->nullable();
+            $table->text('lampiran')->nullable();
             $table->timestamps();
         });
     }

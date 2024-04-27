@@ -30,7 +30,7 @@ const Sidebar = ({ isSidebarOpen, user }) => {
     }
     return (
         <aside
-            className={`h-screen lg:w-80 shadow-md w-[100%] lg:relative absolute z-10 ${
+            className={`h-screen lg:w-[20%] shadow-md w-[100%] lg:relative absolute z-10 ${
                 isSidebarOpen
                     ? "transform translate-x-0 "
                     : "lg:translate-x-0  transform -translate-x-full"

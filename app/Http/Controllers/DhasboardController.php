@@ -16,6 +16,7 @@ class DhasboardController extends Controller
     public function index()
     {
         $now = Carbon::now();
+        $faker = \Faker\Factory::create('id_ID');
         $data_dummy = [
             "dasar" => [
                 [
@@ -28,18 +29,39 @@ class DhasboardController extends Controller
             "kepada" => [
                 [
                     "jabatan" => "LETNAN",
-                    "keterangan" => "ANJAK PERTAMA BID BAG SUMDA POLRES BOGOR",
+                    "tugas" => "ANJAK PERTAMA BID BAG SUMDA POLRES BOGOR",
                     "nama" => "SUHARTO, S.E, M.SI.",
                     "nrp" => "63030721",
                     "pangkat" => "KOMPOL",
                 ],
                 [
                     "jabatan" => "LETNAN",
-                    "keterangan" => "KAPOLSEK PARUNG PANJANG POLRES BOGOR",
+                    "tugas" => "KAPOLSEK PARUNG PANJANG POLRES BOGOR",
                     "nama" => "Drs. NUNDUN RADIAMAN",
                     "nrp" => "65100031",
                     "pangkat" => "KOMPOL",
-                ]
+                ],
+                [
+                    "jabatan" => "LETNAN",
+                    "tugas" => "KAPOLSEK PARUNG PANJANG POLRES BOGOR",
+                    "nama" => "Drs. NUNDUN RADIAMAN",
+                    "nrp" => "65100031",
+                    "pangkat" => "KOMPOL",
+                ],
+                [
+                    "jabatan" => "LETNAN",
+                    "tugas" => "KAPOLSEK PARUNG PANJANG POLRES BOGOR",
+                    "nama" => "Drs. NUNDUN RADIAMAN",
+                    "nrp" => "65100031",
+                    "pangkat" => "KOMPOL",
+                ],
+                [
+                    "jabatan" => "LETNAN",
+                    "tugas" => "KAPOLSEK PARUNG PANJANG POLRES BOGOR",
+                    "nama" => "Drs. NUNDUN RADIAMAN",
+                    "nrp" => "65100031",
+                    "pangkat" => "KOMPOL",
+                ],
             ],
             "no_sprin" => [
                 "kategori" => "DWA.1.2",
@@ -59,6 +81,7 @@ class DhasboardController extends Controller
                     "untuk" => "tersebut nomor urut satu dibebaskan dari tugas dan Bogor (dalam rangka riksa Si Propam Polres Bogor)"
                 ]
             ],
+            "lampiran" => "lampiran sprin pelaksanaan tugas survey kepuasan masyarakat, kotak sarapan, petugas pegaduhan offline / online dan ikm digital"
         ];
 
         $user = user::with(['role'])->where('role_id', 2)->latest()->get();
@@ -86,6 +109,19 @@ class DhasboardController extends Controller
 
         $data = [];
         $index = 1;
+        $op = ['NRP', 'NIP'];
+        $random_op = $op[rand(0, 1)];
+        $pangkat = ['AKP', 'IPTU', 'AIPTU', 'KOMPOL', 'AKBP', 'KOMBES', 'BRIGJEN', 'MUTASI', 'KOMBES', 'IRJEN'];
+        $jabatan = ['Kapolsek', 'Kasat', 'Kapolres', 'Kanit Reginet', 'Kanit Reskrim', 'Kanit Lantas', 'Kanit Binmas', 'Kanit Intel', 'Kanit Narkoba', 'Kanit Sabhara'];
+        $ganerate_nrp = function () use ($faker) {
+            $nrp = $faker->randomNumber(6);
+            return $nrp;
+        };
+        $ganerate_nip = function () use ($faker) {
+            $nip = '19' . $faker->randomNumber(8) . $faker->randomNumber(6);
+            return $nip;
+        };
+
         foreach ($user as $key => $value) {
             for ($i = 0; $i < 5; $i++) {
                 $data[] = [
@@ -106,7 +142,8 @@ class DhasboardController extends Controller
                 'uuid' => str()->uuid(),
                 'user_id' => $value['user']['id'],
                 'uuid_user' => $value['user']['uuid'],
-                'created_at' => now(),
+                'lampiran' => $data_dummy['lampiran'],
+                'created_at' => $now->copy()->subDays(rand(1, 15))->format('Y-m-d'),
             ]);
 
             $laporan->no_sprin()->create([
@@ -132,15 +169,17 @@ class DhasboardController extends Controller
                 ]);
             }
 
+
             foreach ($value['kepada'] as $kepada) {
                 $laporan->kepada()->create([
                     'uuid' => str()->uuid(),
                     'laporan_uuid' => $laporan->uuid,
-                    'nama' => $kepada['nama'],
-                    'pangkat' => $kepada['pangkat'],
-                    'nrp' => $kepada['nrp'],
-                    'jabatan' => $kepada['jabatan'],
-                    'keterangan' => $kepada['keterangan'],
+                    'nama' => $faker->name,
+                    'pangkat' => $pangkat[rand(0, 9)],
+                    'picked' => $random_op,
+                    'nrp' => $random_op == 'NRP' ? $ganerate_nrp() : $ganerate_nip(),
+                    'jabatan' => $jabatan[rand(0, 9)],
+                    'tugas' => $kepada['tugas'],
                 ]);
             }
 
@@ -160,10 +199,70 @@ class DhasboardController extends Controller
             ]);
         }
 
+        foreach ($data as $key => $value) {
+            $laporan = Laporan::create([
+                'uuid' => str()->uuid(),
+                'user_id' => $value['user']['id'],
+                'uuid_user' => $value['user']['uuid'],
+                'lampiran' => $data_dummy['lampiran'],
+                'created_at' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
+            ]);
+
+            $laporan->no_sprin()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'kode' => sprintf("%03d", $index++),
+                'kategori' => $kategori[rand(0, 5)],
+                'tahun' => rand(2020, 2024),
+                'unit' => $romawi[rand(0, 9)],
+            ]);
+
+            $laporan->pertimbangan()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'pertimbangan' => $value['pertimbangan']['pertimbangan'],
+            ]);
+
+            foreach ($value['dasar'] as $dasar) {
+                $laporan->dasar()->create([
+                    'uuid' => str()->uuid(),
+                    'laporan_uuid' => $laporan->uuid,
+                    'dasar' => $dasar['dasar'],
+                ]);
+            }
+
+
+            foreach ($value['kepada'] as $kepada) {
+                $laporan->kepada()->create([
+                    'uuid' => str()->uuid(),
+                    'laporan_uuid' => $laporan->uuid,
+                    'nama' => $faker->name,
+                    'pangkat' => $pangkat[rand(0, 9)],
+                    'picked' => $random_op,
+                    'nrp' => $random_op == 'NRP' ? $ganerate_nrp() : $ganerate_nip(),
+                    'jabatan' => $jabatan[rand(0, 9)],
+                    'tugas' => $kepada['tugas'],
+                ]);
+            }
+
+            foreach ($value['untuk'] as $untuk) {
+                $laporan->untuk()->create([
+                    'uuid' => str()->uuid(),
+                    'laporan_uuid' => $laporan->uuid,
+                    'untuk' => $untuk['untuk'],
+                ]);
+            }
+
+            $laporan->surat_perintah()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'berlaku' => $now->copy()->format('Y-m-d'),
+                'hingga' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
+            ]);
+        }
 
         return response()->json([
             'count' => count($data),
-            'data' => $data,
         ]);
     }
 

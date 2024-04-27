@@ -1,6 +1,6 @@
 import Layout from "@/Layouts/Layout";
 import { Link } from "@inertiajs/react";
-import moment from "moment";
+import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
 import React, { useEffect, useState } from "react";
@@ -87,6 +87,7 @@ export default function Index({ data: data_table }) {
     };
 
     const searchData = () => {
+        setItemOffset(0);
         const filteredData = data_table.filter((item) => {
             return (
                 item.user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -99,9 +100,36 @@ export default function Index({ data: data_table }) {
                 item.no_sprin.kategori
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
-                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+                item.no_sprin.tahun
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                [
+                    item.no_sprin.kode,
+                    item.no_sprin.unit,
+                    item.no_sprin.kategori,
+                    item.no_sprin.tahun,
+                ]
+                    .join("/")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.berlaku)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.hingga)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.created_at)
+                    .fromNow()
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.feedback?.status?.name_status
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
             );
         });
+        console.log(filteredData);
         setData(filteredData);
     };
 
@@ -142,7 +170,7 @@ export default function Index({ data: data_table }) {
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data.filter(
+                                    data_table.filter(
                                         (item) =>
                                             item?.feedback === null ||
                                             item?.feedback?.status_id === 1
@@ -183,7 +211,7 @@ export default function Index({ data: data_table }) {
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data.filter(
+                                    data_table.filter(
                                         (item) =>
                                             item?.feedback?.status_id === 2
                                     ).length
@@ -223,7 +251,7 @@ export default function Index({ data: data_table }) {
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data.filter(
+                                    data_table.filter(
                                         (item) =>
                                             item?.feedback?.status_id === 3
                                     ).length

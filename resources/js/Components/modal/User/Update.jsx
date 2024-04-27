@@ -12,15 +12,21 @@ export default function Update({ data: data_user }) {
         email: "",
         no_telp: "",
         alamat: "",
+        nrp: "",
+        pangkat: "",
+        jabatan: "",
         password: "",
     });
     useEffect(() => {
         setData({
-            uuid: data_user.uuid,
-            name: data_user.name,
-            email: data_user.email,
-            no_telp: data_user.no_telp,
-            alamat: data_user.alamat,
+            uuid: data_user?.uuid,
+            name: data_user?.user?.name,
+            email: data_user?.user?.email,
+            no_telp: data_user?.user?.no_telp,
+            alamat: data_user?.user?.alamat,
+            nrp: data_user?.nrp,
+            pangkat: data_user?.pangkat,
+            jabatan: data_user?.jabatan,
         });
     }, [data_user]);
 
@@ -62,6 +68,24 @@ export default function Update({ data: data_user }) {
                     >
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-row gap-5 w-full">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel htmlFor="nrp" value="nrp" />
+                                    <TextInput
+                                        id="nrp"
+                                        type="text"
+                                        name="nrp"
+                                        value={data.nrp}
+                                        className="mt-1 block w-full"
+                                        autoComplete="nrp"
+                                        onChange={(e) =>
+                                            setData("nrp", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.nrp}
+                                        className="mt-2"
+                                    />
+                                </div>
                                 <div className="flex flex-col gap-2 w-full">
                                     <InputLabel
                                         htmlFor="update_name"
@@ -146,6 +170,50 @@ export default function Update({ data: data_user }) {
                                     />
                                     <InputError
                                         message={errors.alamat}
+                                        className="mt-2"
+                                    />
+                                </div>
+                            </div>{" "}
+                            <div className="flex flex-row gap-5 w-full">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="pangkat"
+                                        value="Pangkat"
+                                    />
+                                    <TextInput
+                                        id="pangkat"
+                                        type="text"
+                                        name="pangkat"
+                                        value={data.pangkat}
+                                        className="mt-1 block w-full"
+                                        autoComplete="pangkat"
+                                        onChange={(e) =>
+                                            setData("pangkat", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.pangkat}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="jabatan"
+                                        value="Jabatan"
+                                    />
+                                    <TextInput
+                                        id="jabatan"
+                                        type="text"
+                                        name="jabatan"
+                                        value={data.jabatan}
+                                        className="mt-1 block w-full"
+                                        autoComplete="jabatan"
+                                        onChange={(e) =>
+                                            setData("jabatan", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.jabatan}
                                         className="mt-2"
                                     />
                                 </div>

@@ -5,28 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Kepada extends Model
+class ClientUser extends Model
 {
     use HasFactory;
+
     protected $primaryKey = 'uuid'; // Tentukan 'uuid' sebagai primary key
 
     protected $keyType = 'string'; // Tentukan tipe data primary key sebagai string (UUID)
 
     public $incrementing = false; // Tandai bahwa primary key tidak bersifat inkremental
-    public $timestamps = false;
 
     protected $fillable = [
         'uuid',
-        'laporan_uuid',
-        'nama',
-        'pangkat',
-        'picked',
+        'user_id',
         'nrp',
+        'pangkat',
         'jabatan',
-        'tugas',
     ];
-    public function laporan()
+
+    public function user()
     {
-        return $this->belongsTo(Laporan::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

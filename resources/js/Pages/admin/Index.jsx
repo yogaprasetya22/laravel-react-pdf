@@ -1,6 +1,6 @@
 import Layout from "@/Layouts/Layout";
 import { Link } from "@inertiajs/react";
-import moment from "moment";
+import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ import ReactPaginate from "react-paginate";
 
 export default function Index({ data: data_table }) {
     const [data, setData] = useState(data_table);
-    const [bulan, setBulan] = useState(moment().format("MMMM").toLowerCase());
+    const [date, setDate] = useState(moment().format("YYYY-MM-DD").toString());
     const [currentData, setCurrentData] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
@@ -20,42 +20,10 @@ export default function Index({ data: data_table }) {
     useEffect(() => {
         setCurrentData(
             data.filter((item) => {
-                return moment(item.created_at).format("MMMM").toLowerCase() ===
-                    bulan
-                    ? item
-                    : null;
+                return moment(item.created_at).format("YYYY-MM-DD") === date;
             })
         );
-    }, [bulan, data]);
-
-    // handle sort all
-    const handleSortStatusAll = () => {
-        setData(data_table);
-    };
-
-    // handle sort by status panding
-    const handleSortStatusPanding = () => {
-        const filterData = data_table.filter(
-            (item) => item?.feedback === null || item?.feedback?.status_id === 1
-        );
-        setData(filterData);
-    };
-
-    // handle sort by status approved
-    const handleSortStatusApproved = () => {
-        const filterData = data_table.filter(
-            (item) => item?.feedback?.status_id === 2
-        );
-        setData(filterData);
-    };
-
-    // handle sort by status rejected
-    const handleSortStatusRejected = () => {
-        const filterData = data_table.filter(
-            (item) => item?.feedback?.status_id === 3
-        );
-        setData(filterData);
-    };
+    }, [data, date]);
 
     useEffect(() => {
         setLoading(true);
@@ -87,6 +55,7 @@ export default function Index({ data: data_table }) {
     };
 
     const searchData = () => {
+        setItemOffset(0);
         const filteredData = data_table.filter((item) => {
             return (
                 item.user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -99,7 +68,33 @@ export default function Index({ data: data_table }) {
                 item.no_sprin.kategori
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
-                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+                item.no_sprin.tahun
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                [
+                    item.no_sprin.kode,
+                    item.no_sprin.unit,
+                    item.no_sprin.kategori,
+                    item.no_sprin.tahun,
+                ]
+                    .join("/")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.berlaku)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.hingga)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.created_at)
+                    .fromNow()
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.feedback?.status?.name_status
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
             );
         });
         setData(filteredData);
@@ -109,189 +104,105 @@ export default function Index({ data: data_table }) {
         <Layout>
             <div className="flex flex-col gap-5">
                 <div className="flex w-full justify-between gap-5">
-                    <div className="w-full bg-blue-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-pink-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
-                            className="bg-white p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
+                            className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
                             style={{
                                 clipPath:
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-xs font-semibold text-gray-400">
-                                Panding
-                            </p>
-                            <i className="fas fa-exclamation-triangle text-2xl p-2 text-yellow-500"></i>
-                        </div>
-                        <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
-                                bulan ini
-                            </p>
-                            <p className="text-3xl font-semibold">
-                                {
-                                    currentData.filter(
-                                        (item) =>
-                                            item?.feedback === null ||
-                                            item?.feedback?.status_id === 1
-                                    ).length
-                                }
+                            <p className="text-md font-extrabold text-gray-500">
+                                {moment(date).format("YYYY")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
-                                Keseluruhan
+                            <p className="text-xs font-semibold text-white">
+                                tahun ini
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data.filter(
+                                    data_table.filter(
                                         (item) =>
-                                            item?.feedback === null ||
-                                            item?.feedback?.status_id === 1
+                                            moment(item.created_at).format(
+                                                "YYYY"
+                                            ) === moment(date).format("YYYY")
                                     ).length
                                 }
                             </p>
                         </div>
                     </div>
-                    <div className="w-full bg-green-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-blue-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
-                            className="bg-white p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
+                            className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
                             style={{
                                 clipPath:
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-xs font-semibold text-gray-400">
-                                Setuju
+                            <p className="text-md font-extrabold text-gray-500">
+                                {moment(date).format("MMMM")}
                             </p>
-                            <i className="fas fa-check-circle text-2xl p-2 text-green-500"></i>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
+                            <p className="text-xs font-semibold text-white">
                                 bulan ini
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    currentData.filter(
+                                    data_table.filter(
                                         (item) =>
-                                            item?.feedback?.status_id === 2
-                                    ).length
-                                }
-                            </p>
-                        </div>
-                        <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
-                                Keseluruhan
-                            </p>
-                            <p className="text-3xl font-semibold">
-                                {
-                                    data.filter(
-                                        (item) =>
-                                            item?.feedback?.status_id === 2
+                                            moment(item.created_at).format(
+                                                "MMMM"
+                                            ) === moment(date).format("MMMM")
                                     ).length
                                 }
                             </p>
                         </div>
                     </div>
-                    <div className="w-full bg-red-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-yellow-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
-                            className="bg-white p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
+                            className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
                             style={{
                                 clipPath:
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-xs font-semibold text-gray-400">
-                                Tolak
+                            <p className="text-md font-extrabold text-gray-500 min-w-[4rem]">
+                                {moment(date).format("dddd") ===
+                                moment().format("dddd")
+                                    ? "Hari Ini"
+                                    : moment(date).format("dddd")}
                             </p>
-                            <i className="fas fa-times text-2xl p-2 text-red-600"></i>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
-                                bulan ini
+                            <p className="text-xs font-semibold text-white">
+                                hari ini
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
                                     currentData.filter(
                                         (item) =>
-                                            item?.feedback?.status_id === 3
-                                    ).length
-                                }
-                            </p>
-                        </div>
-                        <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
-                                Keseluruhan
-                            </p>
-                            <p className="text-3xl font-semibold">
-                                {
-                                    data.filter(
-                                        (item) =>
-                                            item?.feedback?.status_id === 3
+                                            moment(item.created_at).format(
+                                                "dddd"
+                                            ) === moment(date).format("dddd")
                                     ).length
                                 }
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="w-full bg-white">
+                <div className="w-full bg-white rounded-md shadow-md">
                     <div className="overflow-x-auto">
                         <div className="w-full flex justify-between gap-5">
                             <div className="flex gap-2 px-5 py-3 items-center">
-                                <button
-                                    onClick={handleSortStatusAll}
-                                    className="btn rounded-md text-xs px-2 py-1 bg-yellow-500/70 text-white btn-md"
-                                >
-                                    All
-                                </button>
-                                <button
-                                    onClick={handleSortStatusPanding}
-                                    className="btn rounded-md text-xs px-2 py-1 bg-blue-500/70 text-white btn-md"
-                                >
-                                    Tertunda
-                                </button>
-                                <button
-                                    onClick={handleSortStatusApproved}
-                                    className="btn rounded-md text-xs px-2 py-1 bg-green-500/70 text-white btn-md"
-                                >
-                                    DiSetujui
-                                </button>
-                                <button
-                                    onClick={handleSortStatusRejected}
-                                    className="btn rounded-md text-xs px-2 py-1 bg-red-500/70 text-white btn-md"
-                                >
-                                    Ditolak
-                                </button>{" "}
-                                <div className="flex justify-center items-center ">
-                                    <select
-                                        name="bulan"
-                                        id="bulan"
-                                        className="border border-gray-300 rounded-md p-2"
-                                        value={bulan}
-                                        onChange={(e) =>
-                                            setBulan(e.target.value)
-                                        }
-                                    >
-                                        <option value="januari">Januari</option>
-                                        <option value="februari">
-                                            Februari
-                                        </option>
-                                        <option value="maret">Maret</option>
-                                        <option value="april">April</option>
-                                        <option value="mei">Mei</option>
-                                        <option value="juni">Juni</option>
-                                        <option value="juli">Juli</option>
-                                        <option value="agustus">Agustus</option>
-                                        <option value="september">
-                                            September
-                                        </option>
-                                        <option value="oktober">Oktober</option>
-                                        <option value="november">
-                                            November
-                                        </option>
-                                        <option value="desember">
-                                            Desember
-                                        </option>
-                                    </select>
-                                </div>
+                                {/* input type date */}
+                                <input
+                                    type="date"
+                                    className="input input-bordered "
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                />
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <input
                                         type="text"
@@ -334,7 +245,7 @@ export default function Index({ data: data_table }) {
                             </div>
                         </div>
                         <table className="table">
-                            <thead className="bg-gray-600">
+                            <thead className="bg-green-500">
                                 <tr className="font-bold text-lg text-white">
                                     <th className="text-center">No Sprin</th>
                                     <th className="text-center">Name</th>
@@ -344,7 +255,7 @@ export default function Index({ data: data_table }) {
                                         Tanggal Upload
                                     </th>
                                     <th className="text-center">Status</th>
-                                    <th className="text-center">detail</th>
+                                    <th className="text-center">Detail</th>
                                 </tr>
                             </thead>
                             {currentItems.map((item, index) => (

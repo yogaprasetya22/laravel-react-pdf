@@ -45,12 +45,18 @@ export default function User({ data: data_user }) {
     };
 
     const searchData = () => {
+        setItemOffset(0);
         const filteredData = data_user.filter((item) => {
             return (
-                item.name.toLowerCase().includes(search.toLowerCase()) ||
-                item.email.toLowerCase().includes(search.toLowerCase()) ||
-                item.no_telp.toLowerCase().includes(search.toLowerCase()) ||
-                item.alamat.toLowerCase().includes(search.toLowerCase())
+                item.user.name.toLowerCase().includes(search.toLowerCase()) ||
+                item.user.email.toLowerCase().includes(search.toLowerCase()) ||
+                item.user.no_telp
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.user.alamat.toLowerCase().includes(search.toLowerCase()) ||
+                item.nrp.toLowerCase().includes(search.toLowerCase()) ||
+                item.pangkat.toLowerCase().includes(search.toLowerCase()) ||
+                item.jabatan.toLowerCase().includes(search.toLowerCase())
             );
         });
         setData(filteredData);
@@ -65,7 +71,6 @@ export default function User({ data: data_user }) {
                 <div className="overflow-x-auto">
                     <div className="flex justify-between">
                         <div className="flex  px-5 py-3 gap-10">
-                            {/* count page */}
                             <div className="flex flex-row items-center justify-center gap-2">
                                 <span className="font-bold ">show :</span>
                                 <select
@@ -81,7 +86,6 @@ export default function User({ data: data_user }) {
                                 </select>{" "}
                                 <span className="font-bold ">entries</span>
                             </div>
-                            {/* search */}
                             <div className="flex flex-row items-center justify-center gap-2">
                                 <input
                                     type="text"
@@ -98,7 +102,6 @@ export default function User({ data: data_user }) {
                                 </button>
                             </div>
                         </div>
-                        {/* add member */}
                         <div className="flex items-center gap-2 px-5 py-3">
                             <button
                                 className="btn bg-green-400 text-white"
@@ -109,39 +112,58 @@ export default function User({ data: data_user }) {
                         </div>
                     </div>{" "}
                     <table className="table">
-                        {/* head */}
                         <thead>
                             <tr className="font-bold text-lg text-black">
                                 <th>id</th>
+                                <th>nrp</th>
                                 <th>nama</th>
                                 <th>email</th>
                                 <th>no telp</th>
                                 <th>alamat</th>
-                                <th>aksi</th>
+                                <th>pangkat</th>
+                                <th>jabatan</th>
+                                <th className="text-center">aksi</th>
                             </tr>
                         </thead>
                         {currentItems.map((item, index) => (
                             <tbody key={item.uuid}>
                                 <tr>
                                     <td>
-                                        <p className="font-bold">{item.id}</p>
+                                        <p className="font-bold">
+                                            {item.user.id}
+                                        </p>
                                     </td>
                                     <td>
-                                        <p className="font-bold">{item.name}</p>
+                                        <p className="font-bold">{item.nrp}</p>
                                     </td>
                                     <td>
                                         <p className="font-bold">
-                                            {item.email}
+                                            {item.user.name}
                                         </p>
                                     </td>
                                     <td>
                                         <p className="font-bold">
-                                            {item.no_telp}
+                                            {item.user.email}
                                         </p>
                                     </td>
                                     <td>
                                         <p className="font-bold">
-                                            {item.alamat}
+                                            {item.user.no_telp}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p className="font-bold">
+                                            {item.user.alamat}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p className="font-bold">
+                                            {item.pangkat}
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p className="font-bold">
+                                            {item.jabatan}
                                         </p>
                                     </td>
 

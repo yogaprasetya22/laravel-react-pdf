@@ -14,7 +14,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
     const {
         data: formValues,
         setData: setFormValues,
-        post,
+        put,
         processing,
         errors,
         reset,
@@ -31,9 +31,10 @@ export default function DetailHistory({ data, tamplate, auth }) {
             {
                 nama: "",
                 pangkat: "",
+                picked: "",
                 nrp: "",
                 jabatan: "",
-                keterangan: "",
+                tugas: "",
             },
         ],
         untuk: [""],
@@ -42,6 +43,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
             hingga: "",
         },
         uuid: data?.uuid,
+        lampiran: "",
     });
 
     React.useEffect(() => {
@@ -59,8 +61,9 @@ export default function DetailHistory({ data, tamplate, auth }) {
                     nama: "",
                     pangkat: "",
                     nrp: "",
+                    picked: "",
                     jabatan: "",
-                    keterangan: "",
+                    tugas: "",
                 },
             ],
             untuk: data?.untuk.map((item) => item?.untuk) || [""],
@@ -69,6 +72,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
                 hingga: data?.surat_perintah.hingga || "",
             },
             uuid: data?.uuid,
+            lampiran: data?.lampiran || "",
         });
     }, [data]);
 
@@ -113,13 +117,13 @@ export default function DetailHistory({ data, tamplate, auth }) {
         const formData = new FormData();
         formData.append("file", blob);
         setFormValues({ ...formValues, file: formData });
-        post(route("laporan.update"), {
+        put(route("laporan.update"), {
             preserveScroll: true,
             onSuccess: () => {
-                reset();
                 toast("Berhasil update laporan", {
                     toastId: "customId",
                 });
+                reset();
             },
         });
     };
@@ -134,6 +138,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
                         <FormLaporan
                             formValues={formValues}
                             handleFormChange={handleFormChange}
+                            no_sprin={true}
                         />
                     </div>
                 </div>
@@ -158,7 +163,7 @@ export default function DetailHistory({ data, tamplate, auth }) {
                         <>
                             <button
                                 onClick={() => {
-                                    if (data.feedback.status_id === 2) {
+                                    if (data?.feedback?.status_id === 2) {
                                         toast(
                                             `Maaf tidak bisa Update karna sudah ${data.feedback.status.name_status}`,
                                             {

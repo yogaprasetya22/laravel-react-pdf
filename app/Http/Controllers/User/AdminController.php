@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientUser;
 use App\Models\Feedback;
 use App\Models\Laporan;
 use App\Models\Status;
@@ -46,6 +47,8 @@ class AdminController extends Controller
             'feedback.status',
         ])->where('uuid', $uuid)->first();
 
+        $user = ClientUser::with(['user.role'])->where('user_id', $laporan->user->id)->first();
+
         $result = collect([
             'nomor_sprin' => [
                 'kode' => $laporan->no_sprin->kode,
@@ -61,7 +64,7 @@ class AdminController extends Controller
                     'pangkat' => $item->pangkat,
                     'nrp' => $item->nrp,
                     'jabatan' => $item->jabatan,
-                    'keterangan' => $item->keterangan,
+                    'tugas' => $item->tugas,
                 ];
             }),
             'untuk' => collect($laporan->untuk)->pluck('untuk'),
@@ -69,8 +72,9 @@ class AdminController extends Controller
                 'berlaku' => $laporan->surat_perintah->berlaku,
                 'hingga' => $laporan->surat_perintah->hingga,
             ],
-            'user' => $laporan->user,
-            'feedback' => $laporan->feedback,
+            'user' => $user,
+            'feedback' => $laporan?->feedback,
+            'lampiran' => $laporan?->lampiran,
         ]);
 
         $tamplate = Template::first();
@@ -113,6 +117,8 @@ class AdminController extends Controller
             'feedback.status',
         ])->where('uuid', $uuid)->first();
 
+        $user = ClientUser::with(['user.role'])->where('user_id', $laporan->user->id)->first();
+
         $result = collect([
             'nomor_sprin' => [
                 'kode' => $laporan->no_sprin->kode,
@@ -128,7 +134,7 @@ class AdminController extends Controller
                     'pangkat' => $item->pangkat,
                     'nrp' => $item->nrp,
                     'jabatan' => $item->jabatan,
-                    'keterangan' => $item->keterangan,
+                    'tugas' => $item->tugas,
                 ];
             }),
             'untuk' => collect($laporan->untuk)->pluck('untuk'),
@@ -136,7 +142,9 @@ class AdminController extends Controller
                 'berlaku' => $laporan->surat_perintah->berlaku,
                 'hingga' => $laporan->surat_perintah->hingga,
             ],
-            'user' => $laporan->user,
+            'user' =>   $user,
+            'feedback' => $laporan?->feedback,
+            'lampiran' => $laporan?->lampiran,
         ]);
 
         $tamplate = Template::first();
@@ -167,12 +175,14 @@ class AdminController extends Controller
             ]);
         }
 
-        return Redirect::back();
+        return Redirect::route('admin.aproval');
     }
 
     public function user()
     {
-        $user = User::with(['role'])->where('role_id', 2)->latest()->get();
+        $user = ClientUser::with(['user.role'])->whereHas('user', function ($query) {
+            $query->where('role_id', 2);
+        })->get();
         return Inertia::render('admin/User', [
             'title' => 'User',
             'data' => $user,

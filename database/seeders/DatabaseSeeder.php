@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
         ]);
 
-        User::create([
+        $client =  User::create([
             'uuid' => str()->uuid(),
             'name' => 'client',
             'email' => 'client@gmail.com',
@@ -44,8 +44,22 @@ class DatabaseSeeder extends Seeder
             'created_at' => now(),
         ]);
 
+        $client->client()->create([
+            'uuid' => str()->uuid(),
+            'nrp' => '12345678',
+            'pangkat' => 'AKP',
+            'jabatan' => 'Kapolsek',
+        ]);
+
+        $pangkat = ['AKP', 'IPTU', 'AIPTU', 'KOMPOL', 'AKBP', 'KOMBES', 'BRIGJEN', 'MUTASI', 'KOMBES', 'IRJEN'];
+        $jabatan = ['Kapolsek', 'Kasat', 'Kapolres', 'Kanit Reginet', 'Kanit Reskrim', 'Kanit Lantas', 'Kanit Binmas', 'Kanit Intel', 'Kanit Narkoba', 'Kanit Sabhara'];
+        $ganerate_nrp = function () use ($faker) {
+            $nrp = $faker->randomNumber(8);
+            return $nrp;
+        };
+
         for ($i = 0; $i < 15; $i++) {
-            User::create([
+            $client =   User::create([
                 'uuid' => str()->uuid(),
                 'name' => 'client' . $i,
                 'email' => 'client' . $i . '@gmail.com',
@@ -54,6 +68,13 @@ class DatabaseSeeder extends Seeder
                 'alamat' => $faker->address,
                 'role_id' => '2',
                 'created_at' => now(),
+            ]);
+
+            $client->client()->create([
+                'uuid' => str()->uuid(),
+                'nrp' => $ganerate_nrp(),
+                'pangkat' => $pangkat[rand(0, 9)],
+                'jabatan' => $jabatan[rand(0, 9)],
             ]);
         }
 

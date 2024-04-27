@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientUser;
 use App\Models\Laporan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -34,7 +35,9 @@ class SuperadminController extends Controller
 
     public function client()
     {
-        $user = User::with(['role'])->where('role_id', 2)->latest()->get();
+        $user = ClientUser::with(['user.role'])->whereHas('user', function ($query) {
+            $query->where('role_id', 2);
+        })->get();
         return Inertia::render('superadmin/User', [
             'title' => 'Create User',
             'data' => $user

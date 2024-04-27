@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('laporan_uuid')->references('uuid')->on('laporans');
             $table->string('kode');
             $table->string('unit');
-            $table->string('kategori');
             $table->string('tahun');
+            $table->string('kategori');
         });
     }
 

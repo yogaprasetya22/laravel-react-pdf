@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\ClientUser;
 use App\Models\Feedback;
 use App\Models\Laporan;
 use App\Models\Template;
@@ -56,7 +57,7 @@ class ClientController extends Controller
 
     public function history()
     {
-        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback'])->whereHas('user', function ($query) {
+        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback.status'])->whereHas('user', function ($query) {
             $query->where('uuid', Auth::user()->uuid);
         })->latest()->get();
         return Inertia::render('client/History', [
@@ -101,6 +102,8 @@ class ClientController extends Controller
             'feedback.status',
         ])->where('uuid', $uuid)->first();
 
+        $user = ClientUser::with(['user.role'])->where('user_id', $laporan->user->id)->first();
+
         $result = collect([
             'nomor_sprin' => [
                 'kode' => $laporan->no_sprin->kode,
@@ -123,8 +126,10 @@ class ClientController extends Controller
             'surat_perintah' => [
                 'berlaku' => $laporan->surat_perintah->berlaku,
                 'hingga' => $laporan->surat_perintah->hingga,
+                'pangkat' => 'r'
             ],
-            'user' => $laporan->user,
+            'user' => $user,
+            'feedback' => $laporan->feedback
         ]);
         $tamplate = Template::first();
         return Inertia::render('client/DetailFeedback', [
@@ -146,9 +151,12 @@ class ClientController extends Controller
             'no_telp' => 'required',
             'alamat' => 'required',
             'password' => 'required|min:6',
+            'nrp' => 'required',
+            'pangkat' => 'required',
+            'jabatan' => 'required',
         ]);
 
-        User::create([
+        $user = User::create([
             'uuid' => str()->uuid(),
             'name' => $request->name,
             'email' => $request->email,
@@ -157,6 +165,13 @@ class ClientController extends Controller
             'password' => bcrypt($request->password),
             'role_id' => '2',
             'created_at' => now(),
+        ]);
+
+        $user->client()->create([
+            'uuid' => str()->uuid(),
+            'nrp' => $request->nrp,
+            'pangkat' => $request->pangkat,
+            'jabatan' => $request->jabatan,
         ]);
 
         return Redirect::back();
@@ -196,6 +211,9 @@ class ClientController extends Controller
             'email' => 'required|email',
             'no_telp' => 'required',
             'alamat' => 'required',
+            'nrp' => 'required',
+            'pangkat' => 'required',
+            'jabatan' => 'required',
         ]);
 
         $user = User::where('uuid', $request->uuid)->first();
@@ -207,12 +225,22 @@ class ClientController extends Controller
                 'alamat' => $request->alamat,
                 'password' => bcrypt($request->password),
             ]);
+            $user->client()->update([
+                'nrp' => $request->nrp,
+                'pangkat' => $request->pangkat,
+                'jabatan' => $request->jabatan,
+            ]);
         } else {
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'no_telp' => $request->no_telp,
                 'alamat' => $request->alamat,
+            ]);
+            $user->client()->update([
+                'nrp' => $request->nrp,
+                'pangkat' => $request->pangkat,
+                'jabatan' => $request->jabatan,
             ]);
         }
         return Redirect::back();

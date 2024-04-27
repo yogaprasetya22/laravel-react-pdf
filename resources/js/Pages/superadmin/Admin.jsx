@@ -44,6 +44,7 @@ export default function User({ data: data_user }) {
         setItemOffset(newOffset);
     };
     const searchData = () => {
+        setItemOffset(0);
         const filteredData = data_user.filter((item) => {
             return (
                 item.name.toLowerCase().includes(search.toLowerCase()) ||

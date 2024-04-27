@@ -8,7 +8,7 @@ export const MenuDashboardValidate = (user) => {
             icon: "fas fa-th-large",
         },
         {
-            name: "Aproval",
+            name: "Data Surat",
             url: `/${validateRole(user?.role_id)}/aproval`,
             icon: "fas fa-check",
         },

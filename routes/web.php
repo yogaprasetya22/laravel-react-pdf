@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
 
     // laporan
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
-    Route::post('/laporan', [LaporanController::class, 'update'])->name('laporan.update');
+    Route::put('/laporan/update', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan', [LaporanController::class, 'destroy'])->name('laporan.destroy');
 });
 

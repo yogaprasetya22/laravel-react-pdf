@@ -94,29 +94,32 @@ export default function DetailAproval({ data, tamplate, status, laporan }) {
                     </div>
                     <div className="flex flex-col gap-10">
                         <div className="flex flex-row gap-2">
-                            <div className="flex flex-col gap-5">
+                            <div className="flex flex-col gap-5 pr-10">
                                 <p className="text-md">Nama</p>
                                 <p className="text-md">Email</p>
-                                <p className="text-md">Nomor Telepon</p>
-                                <p className="text-md">Alamat</p>
+                                <p className="text-md">No Telp</p>
+                                <p className="text-md">Pangkat</p>
+                                <p className="text-md">Jabatan</p>
                             </div>
                             <div className="flex flex-col gap-5">
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
                                 <p className="text-md">:</p>
+                                <p className="text-md">:</p>
                             </div>
                             <div className="flex flex-col gap-5">
                                 <p className="text-md truncate w-[10rem]">
-                                    {data.user.name}
+                                    {data.user.user.name}
                                 </p>
                                 <p className="text-md truncate w-[10rem]">
-                                    {data.user.email}
+                                    {data.user.user.email}
                                 </p>
-                                <p className="text-md">{data.user.no_telp}</p>
-                                <p className="text-md truncate w-[10rem]">
-                                    {data.user.alamat}
+                                <p className="text-md">
+                                    {data.user.user.no_telp}
                                 </p>
+                                <p className="text-md">{data.user.pangkat}</p>
+                                <p className="text-md">{data.user.jabatan}</p>
                             </div>
                         </div>
                         <div className="flex flex-row gap-3">

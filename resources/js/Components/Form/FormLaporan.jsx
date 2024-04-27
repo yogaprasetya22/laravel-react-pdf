@@ -3,7 +3,11 @@ import { Formik, Field, Form, FieldArray, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { FildArrayTextAreas } from "@/Components/Form/FormExample";
 
-export default function FormLaporan({ formValues, handleFormChange }) {
+export default function FormLaporan({
+    formValues,
+    handleFormChange,
+    no_sprin,
+}) {
     return (
         <Formik
             validationSchema={Yup.object().shape({
@@ -21,14 +25,12 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                     Yup.object().shape({
                         nama: Yup.string().required("Nama harus diisi"),
                         pangkat: Yup.string().required("Pangkat harus diisi"),
-                        nrp: Yup.string().required("NRP harus diisi"),
+                        picked: Yup.string().required("Picked harus diisi"),
+                        nrp: Yup.string().required("NRP/NIP harus diisi"),
                         jabatan: Yup.string().required("Jabatan harus diisi"),
-                        keterangan: Yup.string().required(
-                            "Keterangan harus diisi"
-                        ),
+                        tugas: Yup.string().required("Tugas harus diisi"),
                     })
                 ),
-
                 untuk: Yup.array().of(
                     Yup.string().required("Untuk harus diisi")
                 ),
@@ -45,8 +47,9 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                 <Form className="w-full flex gap-5 flex-col">
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Nomor Sprin
+                            <label className="text-xl font-semibold pb-1">
+                                Nomor Sprin{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <div className="flex flex-col gap-2">
                                 <Field
@@ -101,10 +104,13 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 />
                             </div>
                         </div>
-                        <hr />
+                        <div className="divider">
+                            <span className="text-teal-600/80">DAN</span>
+                        </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Pertimbangan
+                            <label className="text-xl font-semibold pb-1">
+                                Pertimbangan{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <FildArrayTextAreas
                                 name="pertimbangan"
@@ -129,20 +135,23 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 className="text-red-500"
                             />
                         </div>
-                        <hr />
+                        <div className="divider">
+                            <span className="text-teal-600/80">DAN</span>
+                        </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Dasar
+                            <label className="text-xl font-semibold pb-1">
+                                Dasar{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <FieldArray name="dasar">
                                 {({ push, remove }) => (
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-5">
                                         {values.dasar.map((_, index) => (
                                             <div
                                                 className="flex flex-col gap-2 relative"
                                                 key={index}
                                             >
-                                                <div className="border-b border-gray-500"></div>
+                                                <div className="border-b border-gray-400"></div>
                                                 <FildArrayTextAreas
                                                     name={`dasar.${index}`}
                                                     onChange={(e) =>
@@ -174,6 +183,9 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                 >
                                                     -
                                                 </button>
+                                                <span className="px-2 bg-white text-teal-500/80 border-r border-t border-l rounded-md absolute left-0 -top-4 text-lg">
+                                                    {index + 1}
+                                                </span>
                                             </div>
                                         ))}
                                         <button
@@ -187,20 +199,23 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 )}
                             </FieldArray>
                         </div>
-                        <hr />
+                        <div className="divider">
+                            <span className="text-teal-600/80">DAN</span>
+                        </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Kepada
+                            <label className="text-xl font-semibold pb-1">
+                                Kepada{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <FieldArray name="kepada">
                                 {({ push, remove }) => (
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-8">
                                         {values.kepada.map((_, index) => (
                                             <div
                                                 className="flex flex-col gap-2 relative"
                                                 key={index}
                                             >
-                                                <div className="border-b border-gray-500"></div>
+                                                <div className="border-b border-gray-400"></div>
                                                 <div className="flex flex-col gap-2">
                                                     <Field
                                                         name={`kepada.${index}.nama`}
@@ -227,11 +242,42 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                         className="text-red-500"
                                                     />
                                                 </div>
+                                                <div className="flex flex-row gap-2 items-center justify-center">
+                                                    <label className="flex flex-row gap-1 items-center">
+                                                        <Field
+                                                            type="radio"
+                                                            name={`kepada.${index}.picked`}
+                                                            value="NRP"
+                                                            className="radio radio-success"
+                                                        />
+                                                        <span className="text-xs">
+                                                            NRP
+                                                        </span>
+                                                    </label>
+                                                    /
+                                                    <label className="flex flex-row gap-1 items-center">
+                                                        <Field
+                                                            type="radio"
+                                                            name={`kepada.${index}.picked`}
+                                                            value="NIP"
+                                                            className="radio radio-success"
+                                                        />
+                                                        <span className="text-xs">
+                                                            NIP
+                                                        </span>
+                                                    </label>
+                                                </div>
                                                 <div className="flex flex-col gap-2">
                                                     <Field
                                                         name={`kepada.${index}.nrp`}
                                                         type="text"
-                                                        placeholder="NRP"
+                                                        placeholder={`${
+                                                            values.kepada[index]
+                                                                .picked ===
+                                                            "NRP"
+                                                                ? "NRP"
+                                                                : "NIP"
+                                                        }`}
                                                         className="border-2 border-gray-200 py-2"
                                                     />
                                                     <ErrorMessage
@@ -254,27 +300,27 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                     />
                                                 </div>
                                                 <FildArrayTextAreas
-                                                    name={`kepada.${index}.keterangan`}
+                                                    name={`kepada.${index}.tugas`}
                                                     onChange={(e) =>
                                                         setFieldValue(
-                                                            `kepada.${index}.keterangan`,
+                                                            `kepada.${index}.tugas`,
                                                             e.target.value
                                                         )
                                                     }
                                                     onBlur={(e) =>
                                                         setFieldValue(
-                                                            `kepada.${index}.keterangan`,
+                                                            `kepada.${index}.tugas`,
                                                             e.target.value
                                                         )
                                                     }
                                                     value={
                                                         values.kepada[index]
-                                                            .keterangan
+                                                            .tugas
                                                     }
-                                                    placeholder="Keterangan"
+                                                    placeholder="Tugas"
                                                 />
                                                 <ErrorMessage
-                                                    name={`kepada.${index}.keterangan`}
+                                                    name={`kepada.${index}.tugas`}
                                                     component="div"
                                                     className="text-red-500"
                                                 />
@@ -286,7 +332,10 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                     }
                                                 >
                                                     -
-                                                </button>
+                                                </button>{" "}
+                                                <span className="px-2 bg-white text-teal-500/80 border-r border-t border-l rounded-md absolute left-0 -top-4 text-lg">
+                                                    {index + 1}
+                                                </span>
                                             </div>
                                         ))}
                                         <button
@@ -298,7 +347,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                     pangkat: "",
                                                     nrp: "",
                                                     jabatan: "",
-                                                    keterangan: "",
+                                                    tugas: "",
                                                 })
                                             }
                                         >
@@ -308,20 +357,62 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 )}
                             </FieldArray>
                         </div>
-                        <hr />
+                        {values.kepada.length > 4 && (
+                            <>
+                                <div className="divider">
+                                    <span className="text-teal-600/80">
+                                        DAN
+                                    </span>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <label className="text-xl font-semibold pb-1">
+                                        Lampiran Tugas{" "}
+                                        <span className="text-red-500 text-xl">
+                                            *
+                                        </span>
+                                    </label>
+                                    <FildArrayTextAreas
+                                        name="lampiran"
+                                        onChange={(e) =>
+                                            setFieldValue(
+                                                "lampiran",
+                                                e.target.value
+                                            )
+                                        }
+                                        onBlur={(e) =>
+                                            setFieldValue(
+                                                "lampiran",
+                                                e.target.value
+                                            )
+                                        }
+                                        value={values.lampiran}
+                                        placeholder="Enter Lampiran"
+                                    />
+                                    <ErrorMessage
+                                        name="lampiran"
+                                        component="div"
+                                        className="text-red-500"
+                                    />
+                                </div>
+                            </>
+                        )}
+                        <div className="divider">
+                            <span className="text-teal-600/80">DAN</span>
+                        </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Untuk
+                            <label className="text-xl font-semibold pb-1">
+                                Untuk{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <FieldArray name="untuk">
                                 {({ push, remove }) => (
-                                    <div className="flex flex-col gap-2">
+                                    <div className="flex flex-col gap-5">
                                         {values.untuk.map((_, index) => (
                                             <div
                                                 className="flex flex-col gap-2 relative"
                                                 key={index}
                                             >
-                                                <div className="border-b border-gray-500"></div>
+                                                <div className="border-b border-gray-400"></div>
                                                 <FildArrayTextAreas
                                                     name={`untuk.${index}`}
                                                     onChange={(e) =>
@@ -352,7 +443,10 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                                     }
                                                 >
                                                     -
-                                                </button>
+                                                </button>{" "}
+                                                <span className="px-2 bg-white text-teal-500/80 border-r border-t border-l rounded-md absolute left-0 -top-4 text-lg">
+                                                    {index + 1}
+                                                </span>
                                             </div>
                                         ))}
                                         <button
@@ -366,10 +460,13 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                 )}
                             </FieldArray>
                         </div>
-                        <hr />
+                        <div className="divider">
+                            <span className="text-teal-600/80">DAN</span>
+                        </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                Surat Perintah
+                            <label className="text-xl font-semibold pb-1">
+                                Surat Perintah{" "}
+                                <span className="text-red-500 text-xl">*</span>
                             </label>
                             <div className="flex flex-col gap-2">
                                 <Field

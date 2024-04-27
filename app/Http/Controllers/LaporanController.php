@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Laporan;
+use App\Models\NoSprin;
 use App\Models\Template;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -28,7 +29,7 @@ class LaporanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): \Illuminate\Http\RedirectResponse
+    public function store(Request $request): \Illuminate\Http\RedirectResponse | \Illuminate\Http\JsonResponse
     {
         $request->validate([
             'nomor_sprin' => 'required',
@@ -39,6 +40,20 @@ class LaporanController extends Controller
             'surat_perintah' => 'required',
             'uuid' => 'required',
         ]);
+
+        // buatkan validasi jika kode unit kategori tahun semuanya sama maka akan retrun data sudah ada
+        $empty_spri = NoSprin::where('kode', $request->nomor_sprin['kode'])
+            ->where('unit', $request->nomor_sprin['unit'])
+            ->where('kategori', $request->nomor_sprin['kategori'])
+            ->where('tahun', $request->nomor_sprin['tahun'])
+            ->first();
+
+        if ($empty_spri) {
+            // return Redirect::back();
+            return response()->json([
+                'message' => 'Data sudah ada',
+            ])->setStatusCode(400);
+        }
 
         $laporan = Laporan::create([
             'uuid' => str()->uuid(),
@@ -77,9 +92,10 @@ class LaporanController extends Controller
                 'laporan_uuid' => $laporan->uuid,
                 'nama' => $kepada['nama'],
                 'pangkat' => $kepada['pangkat'],
+                'picked' => $kepada['picked'],
                 'nrp' => $kepada['nrp'],
                 'jabatan' => $kepada['jabatan'],
-                'keterangan' => $kepada['keterangan'],
+                'tugas' => $kepada['tugas'],
             ]);
         }
 
@@ -211,12 +227,6 @@ class LaporanController extends Controller
         ]);
 
         $laporan = Laporan::where('uuid', $request->uuid)->first();
-        $laporan->no_sprin()->update([
-            'kode' => $request->nomor_sprin['kode'],
-            'unit' => $request->nomor_sprin['unit'],
-            'kategori' => $request->nomor_sprin['kategori'],
-            'tahun' => $request->nomor_sprin['tahun'],
-        ]);
 
         $laporan->pertimbangan()->update([
             'pertimbangan' => $request->pertimbangan,
@@ -238,9 +248,10 @@ class LaporanController extends Controller
                 'laporan_uuid' => $laporan->uuid,
                 'nama' => $kepada['nama'],
                 'pangkat' => $kepada['pangkat'],
+                'picked' => $kepada['picked'],
                 'nrp' => $kepada['nrp'],
                 'jabatan' => $kepada['jabatan'],
-                'keterangan' => $kepada['keterangan'],
+                'tugas' => $kepada['tugas'],
             ]);
         }
 

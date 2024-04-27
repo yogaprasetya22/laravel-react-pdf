@@ -9,7 +9,8 @@ import ConfirmationModal from "./modal/ConfirmationModal";
 import { Link } from "@inertiajs/react";
 import DeleteLaporan from "./modal/DeleteLaporan";
 
-export default function TabelHistory({ data }) {
+export default function TabelHistory({ data: data_table }) {
+    const [data, setData] = useState(data_table);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
     const [pageCount, setPageCount] = useState(0);
@@ -48,6 +49,7 @@ export default function TabelHistory({ data }) {
         setItemOffset(newOffset);
     };
     const searchData = () => {
+        setItemOffset(0);
         const filteredData = data_table.filter((item) => {
             return (
                 item.user.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -60,7 +62,33 @@ export default function TabelHistory({ data }) {
                 item.no_sprin.kategori
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
-                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+                item.no_sprin.tahun
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                [
+                    item.no_sprin.kode,
+                    item.no_sprin.unit,
+                    item.no_sprin.kategori,
+                    item.no_sprin.tahun,
+                ]
+                    .join("/")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.berlaku)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.hingga)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.created_at)
+                    .fromNow()
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.feedback?.status?.name_status
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
             );
         });
         setData(filteredData);
@@ -161,7 +189,9 @@ export default function TabelHistory({ data }) {
                                     </td>
                                     <td>
                                         <p className="font-bold">
-                                            {moment(item?.created_at).fromNow()}
+                                            {moment(item?.created_at).format(
+                                                "LL"
+                                            )}
                                         </p>
                                     </td>
                                     <td>

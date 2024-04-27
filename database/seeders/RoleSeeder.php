@@ -57,6 +57,7 @@ class RoleSeeder extends Seeder
             "tembusan_1" => "Kapolres Jakarta",
             "tembusan_2" => "Kabag Ops Polres Jakarta",
             "tembusan_3" => "Kasi Propam Polres Jakarta",
+            // "lampiran" => "LAMPIRAN SPRIN PELAKSAAN TUGAS SERVEY KEPUASAN MASYARAKAT, KOTAK SARAPAN, PETUGAS PENGADUAN OFFLINE/ONLINE DAN IKM DIGITAL",
         ];
 
         // create data tamplate

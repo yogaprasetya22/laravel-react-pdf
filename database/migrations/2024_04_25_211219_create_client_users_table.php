@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kepadas', function (Blueprint $table) {
-            $table->uuid('uuid')->primary();
-            $table->uuid('laporan_uuid');
-            $table->foreign('laporan_uuid')->references('uuid')->on('laporans');
-            $table->string('nama');
+        Schema::create('client_users', function (Blueprint $table) {
+            $table->uuid()->unique()->index();
+            $table->foreignId('user_id');
+            $table->string('nrp')->unique();
             $table->string('pangkat');
-            $table->string('picked');
-            $table->string('nrp');
             $table->string('jabatan');
-            $table->text('tugas');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kepadas');
+        Schema::dropIfExists('client_users');
     }
 };

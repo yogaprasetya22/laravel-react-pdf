@@ -10,6 +10,9 @@ export default function Create() {
         email: "",
         no_telp: "",
         alamat: "",
+        pangkat: "",
+        nrp: "",
+        jabatan: "",
         password: "",
     });
 
@@ -52,6 +55,24 @@ export default function Create() {
                     >
                         <div className="flex flex-col gap-2">
                             <div className="flex flex-row gap-5 w-full">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel htmlFor="nrp" value="nrp" />
+                                    <TextInput
+                                        id="nrp"
+                                        type="text"
+                                        name="nrp"
+                                        value={data.nrp}
+                                        className="mt-1 block w-full"
+                                        autoComplete="nrp"
+                                        onChange={(e) =>
+                                            setData("nrp", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.nrp}
+                                        className="mt-2"
+                                    />
+                                </div>
                                 <div className="flex flex-col gap-2 w-full">
                                     <InputLabel htmlFor="name" value="Name" />
                                     <TextInput
@@ -130,6 +151,50 @@ export default function Create() {
                                     />
                                     <InputError
                                         message={errors.alamat}
+                                        className="mt-2"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-row gap-5 w-full">
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="pangkat"
+                                        value="Pangkat"
+                                    />
+                                    <TextInput
+                                        id="pangkat"
+                                        type="text"
+                                        name="pangkat"
+                                        value={data.pangkat}
+                                        className="mt-1 block w-full"
+                                        autoComplete="pangkat"
+                                        onChange={(e) =>
+                                            setData("pangkat", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.pangkat}
+                                        className="mt-2"
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-2 w-full">
+                                    <InputLabel
+                                        htmlFor="jabatan"
+                                        value="Jabatan"
+                                    />
+                                    <TextInput
+                                        id="jabatan"
+                                        type="text"
+                                        name="jabatan"
+                                        value={data.jabatan}
+                                        className="mt-1 block w-full"
+                                        autoComplete="jabatan"
+                                        onChange={(e) =>
+                                            setData("jabatan", e.target.value)
+                                        }
+                                    />
+                                    <InputError
+                                        message={errors.jabatan}
                                         className="mt-2"
                                     />
                                 </div>

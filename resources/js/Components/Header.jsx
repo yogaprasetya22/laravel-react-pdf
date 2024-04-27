@@ -34,7 +34,7 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
 
     return (
         <header className="bg-white px-5 md:px-16 shadow-md h-auto w-full flex flex-row justify-between items-center sticky top-0 z-50 ">
-            <div className="w-auto flex h-16 md:h-20 gap-2">
+            <div className="w-auto flex h-14 md:h-16 gap-2">
                 <button
                     onClick={toggleSidebar}
                     className="text-3xl lg:hidden block"
@@ -47,10 +47,12 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                 </button>
                 <Link
                     href={`/${validateHeader(user?.role_id)}`}
-                    className="flex flex-row items-center text-3xl "
+                    className="flex flex-row items-center text-3xl gap-2"
                 >
-                    <span className=" text-black font-extrabold">Surat</span>
-                    <span className="text-green-600 font-extrabold">Perintah</span>
+                    <span className=" text-black font-extrabold">Manajemen</span>
+                    <span className="text-green-600 font-extrabold">
+                        Surat
+                    </span>
                 </Link>
             </div>
 
@@ -68,12 +70,9 @@ const Header = ({ toggleSidebar, isSidebarOpen, user }) => {
                                         alt=""
                                         className=" rounded-full w-6 h-6 border border-gray-300"
                                     />
-                                    <div className="flex flex-col pl-2 justify-end items-start mt-3 pb-1">
+                                    <div className="flex flex-col py-3">
                                         <p className="text-md font-extrabold">
                                             {user.name}
-                                        </p>
-                                        <p className="text-[8px] text-start">
-                                            {validateRole(user.role_id)}
                                         </p>
                                     </div>
                                     <svg

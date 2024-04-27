@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Laporan::class);
     }
+
+    public function client()
+    {
+        return $this->hasOne(ClientUser::class);
+    }
 }
