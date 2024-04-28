@@ -1,2 +1,3 @@
 export PATH=/opt/homebrew/bin:$PATH
-git pull
+git reset --hard HEAD
+git pull
