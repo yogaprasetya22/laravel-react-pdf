@@ -46,11 +46,10 @@ Route::prefix('admin')->middleware(['auth', 'role:1', 'verified'])->group(functi
     Route::get('/aproval', [AdminController::class, 'aproval'])->name('admin.aproval');
     Route::post('/aproval', [AdminController::class, 'aproval_post'])->name('admin.aproval.post');
     Route::get('/aproval/{uuid}', [AdminController::class, 'detail_aproval'])->name('admin.detail_aproval');
+    Route::get('/aproval/update/{uuid}', [AdminController::class, 'update_aproval'])->name('admin.update_aproval');
     // user
     Route::get('/user', [AdminController::class, 'user'])->name('admin.user');
-    Route::post('/user', [ClientController::class, 'store'])->name('admin.user.store');
-    Route::put('/user', [ClientController::class, 'update'])->name('admin.user.update');
-    Route::delete('/user', [ClientController::class, 'destroy'])->name('admin.user.destroy');
+
     // tamplate
     Route::get('/tamplate', [AdminController::class, 'tamplate'])->name('admin.tamplate');
     Route::post('/tamplate', [LaporanController::class, 'store_tamplate'])->name('admin.store_tamplate');
@@ -75,6 +74,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/laporan', [LaporanController::class, 'store'])->name('laporan.store');
     Route::put('/laporan/update', [LaporanController::class, 'update'])->name('laporan.update');
     Route::delete('/laporan', [LaporanController::class, 'destroy'])->name('laporan.destroy');
+    // user
+    Route::post('/user', [ClientController::class, 'store'])->name('user.store');
+    Route::put('/user', [ClientController::class, 'update'])->name('user.update');
+    Route::delete('/user', [ClientController::class, 'destroy'])->name('user.destroy');
 });
 
 require __DIR__ . '/auth.php';

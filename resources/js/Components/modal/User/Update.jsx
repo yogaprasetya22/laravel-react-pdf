@@ -17,6 +17,7 @@ export default function Update({ data: data_user }) {
         jabatan: "",
         password: "",
     });
+
     useEffect(() => {
         setData({
             uuid: data_user?.uuid,
@@ -32,11 +33,12 @@ export default function Update({ data: data_user }) {
 
     const handleUpdateUser = (e) => {
         e.preventDefault();
-        put(route("admin.user.update"), {
+        put(route("user.update"), {
             preserveScroll: true,
             onSuccess: () => {
                 window.my_modal_2.close();
                 reset();
+                window.location.reload();
             },
         });
     };

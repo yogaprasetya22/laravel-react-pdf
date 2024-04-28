@@ -19,7 +19,7 @@ export default function Create() {
     const handleAddUser = (e) => {
         e.preventDefault();
 
-        post(route("admin.user.store"), {
+        post(route("user.store"), {
             preserveScroll: true,
             onSuccess: () => {
                 window.my_modal_1.close();

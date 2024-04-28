@@ -21,7 +21,7 @@ export default function Delete({ uuid }) {
     const handleDelete = (e) => {
         e.preventDefault();
 
-        destroy(route("admin.user.destroy"), {
+        destroy(route("user.destroy"), {
             preserveScroll: true,
             onSuccess: () => {
                 window.my_modal_3.close();

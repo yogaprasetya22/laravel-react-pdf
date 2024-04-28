@@ -11,10 +11,6 @@ class TableUserController extends Controller
 {
     //
 
-    public function index()
-    {
-    }
-
 
 
     public function search(Request $request)

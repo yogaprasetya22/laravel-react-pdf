@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import moment from "moment/moment";
 import "moment/locale/id";
 moment.locale("id");
-import { useForm, usePage } from "@inertiajs/react";
+import { router, useForm, usePage } from "@inertiajs/react";
 
 export default function DetailAproval({ data, tamplate, status, laporan }) {
     const [sign, setSign] = useState(null);
@@ -221,22 +221,36 @@ export default function DetailAproval({ data, tamplate, status, laporan }) {
                             placeholder="Feedback"
                         ></textarea>
                     </div>
-                    <div className="w-full flex justify-end">
+                    <div className="w-full flex justify-between">
                         <div className="flex w-1/5 gap-3 justify-between">
                             <button
-                                className="btn hover:bg-red-400/85 rounded-md bg-red-500 font-extrabold text-white"
-                                onClick={() => window.history.back()}
+                                className="btn hover:bg-yellow-400/85 rounded-md bg-yellow-500 font-extrabold text-white"
+                                onClick={() =>
+                                    router.visit(
+                                        `/admin/aproval/update/${laporan.uuid}`
+                                    )
+                                }
                             >
-                                Back
+                                update
                             </button>
                         </div>
-                        <div className="flex gap-3">
-                            <button
-                                className="btn hover:bg-green-400/85 rounded-md bg-green-500 font-extrabold text-white"
-                                onClick={handleUpdate}
-                            >
-                                Save
-                            </button>
+                        <div className="w-full flex justify-end gap-5">
+                            <div className="flex w-1/5 gap-3 justify-between">
+                                <button
+                                    className="btn hover:bg-red-400/85 rounded-md bg-red-500 font-extrabold text-white"
+                                    onClick={() => router.visit("/admin/aproval")}
+                                >
+                                    Back
+                                </button>
+                            </div>
+                            <div className="flex gap-3">
+                                <button
+                                    className="btn hover:bg-green-400/85 rounded-md bg-green-500 font-extrabold text-white"
+                                    onClick={handleUpdate}
+                                >
+                                    Save
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

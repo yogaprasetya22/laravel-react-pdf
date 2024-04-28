@@ -25,7 +25,7 @@ export default function User({ data: data_user }) {
         const endOffset = parseInt(itemOffset) + parseInt(page);
         const sortData = data
             .sort((a, b) => {
-                return a.id - b.id;
+                return a.user.id - b.user.id;
             })
             .slice(itemOffset, endOffset);
         setCurrentItems(sortData);

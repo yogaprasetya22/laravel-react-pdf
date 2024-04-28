@@ -76,6 +76,7 @@ class ClientController extends Controller
             'tamplate' => $tamplate
         ]);
     }
+
     public function feedback()
     {
         $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback.status',])->whereHas('user', function ($query) {
@@ -202,7 +203,7 @@ class ClientController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request): \Illuminate\Http\RedirectResponse
+    public function update(Request $request): \Illuminate\Http\RedirectResponse | \Illuminate\Http\JsonResponse
     {
         // update data user
         $request->validate([
@@ -216,7 +217,9 @@ class ClientController extends Controller
             'jabatan' => 'required',
         ]);
 
-        $user = User::where('uuid', $request->uuid)->first();
+        $user = User::whereHas('client', function ($query) use ($request) {
+            $query->where('uuid', $request->uuid);
+        })->first();
         if ($request->password) {
             $user->update([
                 'name' => $request->name,
@@ -252,7 +255,9 @@ class ClientController extends Controller
     public function destroy(Request $request): \Illuminate\Http\RedirectResponse
     {
         // delete data user
-        $user = User::where('uuid', $request->uuid)->first();
+        $user = User::whereHas('client', function ($query) use ($request) {
+            $query->where('uuid', $request->uuid);
+        })->first();
         $user->delete();
 
         return Redirect::back();

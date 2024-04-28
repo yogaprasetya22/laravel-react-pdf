@@ -178,6 +178,17 @@ class AdminController extends Controller
         return Redirect::route('admin.aproval');
     }
 
+    public function update_aproval($uuid)
+    {
+        $tamplate = Template::first();
+        $laporan = Laporan::with(['user', 'no_sprin', 'pertimbangan', 'dasar', 'kepada', 'no_sprin', 'untuk', 'surat_perintah', 'feedback.status',])->where('uuid', $uuid)->first();
+        return Inertia::render('admin/UpdateAproval', [
+            'title' => 'Update Aproval',
+            'data' => $laporan,
+            'tamplate' => $tamplate
+        ]);
+    }
+
     public function user()
     {
         $user = ClientUser::with(['user.role'])->whereHas('user', function ($query) {
