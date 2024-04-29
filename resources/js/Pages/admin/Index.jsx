@@ -28,7 +28,7 @@ export default function Index({ data: data_table }) {
                 return (
                     moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") >=
                         berlaku &&
-                    moment(item.surat_perintah.hingga).format("YYYY-MM-DD") <=
+                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") <=
                         hingga
                 );
             })
