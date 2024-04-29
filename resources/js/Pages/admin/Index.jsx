@@ -8,7 +8,12 @@ import ReactPaginate from "react-paginate";
 
 export default function Index({ data: data_table }) {
     const [data, setData] = useState(data_table);
-    const [date, setDate] = useState(moment().format("YYYY-MM-DD").toString());
+    const [hingga, setHingga] = useState(
+        moment().format("YYYY-MM-DD").toString()
+    );
+    const [berlaku, setBerlaku] = useState(
+        moment().format("YYYY-MM-DD").toString()
+    );
     const [currentData, setCurrentData] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
@@ -17,18 +22,18 @@ export default function Index({ data: data_table }) {
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(5);
 
-    console.log(data);
-
     useEffect(() => {
         setCurrentData(
-            data.filter((item) => {
+            data_table.filter((item) => {
                 return (
-                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") ===
-                    date
+                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") >=
+                        berlaku &&
+                    moment(item.surat_perintah.hingga).format("YYYY-MM-DD") <=
+                        hingga
                 );
             })
         );
-    }, [data, date]);
+    }, [data, berlaku, hingga]);
 
     useEffect(() => {
         setLoading(true);
@@ -102,9 +107,9 @@ export default function Index({ data: data_table }) {
                     .includes(search.toLowerCase())
             );
         });
-        setDate(
-            moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
-        );
+        // setDate(
+        //     moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
+        // );
         setData(filteredData);
     };
 
@@ -121,7 +126,7 @@ export default function Index({ data: data_table }) {
                             }}
                         >
                             <p className="text-md font-extrabold text-gray-500">
-                                {moment(date).format("YYYY")}
+                                {moment(berlaku).format("YYYY")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
@@ -134,7 +139,7 @@ export default function Index({ data: data_table }) {
                                         (item) =>
                                             moment(item.created_at).format(
                                                 "YYYY"
-                                            ) === moment(date).format("YYYY")
+                                            ) === moment(berlaku).format("YYYY")
                                     ).length
                                 }
                             </p>
@@ -148,8 +153,14 @@ export default function Index({ data: data_table }) {
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-500">
-                                {moment(date).format("MMMM")}
+                            <p className="text-md font-extrabold text-gray-500 min-w-[7rem]">
+                                {moment(berlaku).format("MMMM")}{" "}
+                                {moment(berlaku).format("MMMM") !==
+                                    moment(hingga).format("MMMM") && "/"}
+                                {moment(berlaku).format("MMMM") ===
+                                moment(hingga).format("MMMM")
+                                    ? ""
+                                    : moment(hingga).format("MMMM")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
@@ -162,7 +173,7 @@ export default function Index({ data: data_table }) {
                                         (item) =>
                                             moment(item.created_at).format(
                                                 "MMMM"
-                                            ) === moment(date).format("MMMM")
+                                            ) === moment(berlaku).format("MMMM")
                                     ).length
                                 }
                             </p>
@@ -177,16 +188,16 @@ export default function Index({ data: data_table }) {
                             }}
                         >
                             <p className="text-md font-extrabold text-gray-500 min-w-[8rem]">
-                                {moment(date).format("dddd") ===
+                                {moment(berlaku).format("dddd") ===
                                 moment().format("dddd")
                                     ? "Hari Ini"
-                                    : moment(date).format("dddd")}{" "}
-                                {moment(date).format("dddd") !==
+                                    : moment(berlaku).format("dddd")}{" "}
+                                {moment(berlaku).format("dddd") !==
                                     moment().format("dddd") && "/"}
-                                {moment(date).format("dddd") ===
+                                {moment(berlaku).format("dddd") ===
                                 moment().format("dddd")
                                     ? ""
-                                    : moment(date).format("DD")}
+                                    : moment(berlaku).format("DD")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
@@ -199,7 +210,7 @@ export default function Index({ data: data_table }) {
                                         (item) =>
                                             moment(item.created_at).format(
                                                 "dddd"
-                                            ) === moment(date).format("dddd")
+                                            ) === moment(berlaku).format("dddd")
                                     ).length
                                 }
                             </p>
@@ -211,12 +222,36 @@ export default function Index({ data: data_table }) {
                         <div className="w-full flex justify-between gap-5">
                             <div className="flex gap-2 px-5 py-3 items-center">
                                 {/* input type date */}
-                                <input
-                                    type="date"
-                                    className="input input-bordered "
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                />
+                                <label
+                                    htmlFor="berlaku"
+                                    className="flex flex-row items-center gap-2"
+                                >
+                                    <span>Berlaku :</span>
+                                    <input
+                                        id="berlaku"
+                                        type="date"
+                                        className="input input-bordered "
+                                        value={berlaku}
+                                        onChange={(e) =>
+                                            setBerlaku(e.target.value)
+                                        }
+                                    />
+                                </label>
+                                <label
+                                    htmlFor="hingga"
+                                    className="flex flex-row items-center gap-2"
+                                >
+                                    <span>Hingga :</span>
+                                    <input
+                                        id="hingga"
+                                        type="date"
+                                        className="input input-bordered "
+                                        value={hingga}
+                                        onChange={(e) =>
+                                            setHingga(e.target.value)
+                                        }
+                                    />
+                                </label>
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <input
                                         type="text"
