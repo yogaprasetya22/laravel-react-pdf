@@ -22,7 +22,10 @@ export default function Index({ data: data_table }) {
     useEffect(() => {
         setCurrentData(
             data.filter((item) => {
-                return moment(item.created_at).format("YYYY-MM-DD") === date;
+                return (
+                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") ===
+                    date
+                );
             })
         );
     }, [data, date]);
@@ -99,7 +102,9 @@ export default function Index({ data: data_table }) {
                     .includes(search.toLowerCase())
             );
         });
-        setDate(moment(filteredData[0].created_at).format("YYYY-MM-DD"));
+        setDate(
+            moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
+        );
         setData(filteredData);
     };
 
