@@ -107,9 +107,14 @@ export default function Index({ data: data_table }) {
                     .includes(search.toLowerCase())
             );
         });
-        // setDate(
-        //     moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
-        // );
+        setBerlaku(
+            moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
+        );
+        setHingga(
+            moment(filteredData[0].surat_perintah.berlaku)
+                .add(1, "days")
+                .format("YYYY-MM-DD")
+        );
         setData(filteredData);
     };
 
@@ -156,7 +161,7 @@ export default function Index({ data: data_table }) {
                             <p className="text-md font-extrabold text-gray-500 min-w-[7rem]">
                                 {moment(berlaku).format("MMMM")}{" "}
                                 {moment(berlaku).format("MMMM") !==
-                                    moment(hingga).format("MMMM") && "/"}
+                                    moment(hingga).format("MMMM") && "/"}{" "}
                                 {moment(berlaku).format("MMMM") ===
                                 moment(hingga).format("MMMM")
                                     ? ""
@@ -169,35 +174,43 @@ export default function Index({ data: data_table }) {
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data_table.filter(
-                                        (item) =>
-                                            moment(item.created_at).format(
-                                                "MMMM"
-                                            ) === moment(berlaku).format("MMMM")
-                                    ).length
+                                    data_table.filter((item) => {
+                                        return (
+                                            moment(
+                                                item.surat_perintah.berlaku
+                                            ).format("MMMM") ===
+                                                moment(berlaku).format(
+                                                    "MMMM"
+                                                ) ||
+                                            moment(
+                                                item.surat_perintah.berlaku
+                                            ).format("MMMM") ===
+                                                moment(hingga).format("MMMM")
+                                        );
+                                    }).length
                                 }
                             </p>
                         </div>
                     </div>
                     <div className="w-full bg-yellow-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
-                            className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
+                            className="bg-white py-5 p-2 flex flex-col justify-center pr-6 shadow-2xl w-full"
                             style={{
                                 clipPath:
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-500 min-w-[8rem]">
+                            <p className="text-md font-extrabold text-gray-500">
                                 {moment(berlaku).format("dddd") ===
                                 moment().format("dddd")
                                     ? "Hari Ini"
                                     : moment(berlaku).format("dddd")}{" "}
                                 {moment(berlaku).format("dddd") !==
-                                    moment().format("dddd") && "/"}
-                                {moment(berlaku).format("dddd") ===
+                                    moment(hingga).format("dddd") && "/"}{" "}
+                                {moment(hingga).format("dddd") ===
                                 moment().format("dddd")
-                                    ? ""
-                                    : moment(berlaku).format("DD")}
+                                    ? "Hari Ini"
+                                    : moment(hingga).format("dddd")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
@@ -205,14 +218,7 @@ export default function Index({ data: data_table }) {
                                 hari ini
                             </p>
                             <p className="text-3xl font-semibold">
-                                {
-                                    currentData.filter(
-                                        (item) =>
-                                            moment(item.created_at).format(
-                                                "dddd"
-                                            ) === moment(berlaku).format("dddd")
-                                    ).length
-                                }
+                                {currentData.length}
                             </p>
                         </div>
                     </div>
@@ -250,6 +256,7 @@ export default function Index({ data: data_table }) {
                                         onChange={(e) =>
                                             setHingga(e.target.value)
                                         }
+                                        min={berlaku}
                                     />
                                 </label>
                                 <div className="flex flex-row items-center justify-center gap-1">

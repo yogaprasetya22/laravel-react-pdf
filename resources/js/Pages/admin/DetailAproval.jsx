@@ -238,7 +238,9 @@ export default function DetailAproval({ data, tamplate, status, laporan }) {
                             <div className="flex w-1/5 gap-3 justify-between">
                                 <button
                                     className="btn hover:bg-red-400/85 rounded-md bg-red-500 font-extrabold text-white"
-                                    onClick={() => router.visit("/admin/aproval")}
+                                    onClick={() =>
+                                        router.visit("/admin/aproval")
+                                    }
                                 >
                                     Back
                                 </button>

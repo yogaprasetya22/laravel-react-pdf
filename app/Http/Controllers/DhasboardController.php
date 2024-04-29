@@ -146,6 +146,13 @@ class DhasboardController extends Controller
                 'created_at' => $now->copy()->subDays(rand(1, 15))->format('Y-m-d'),
             ]);
 
+            $laporan->feedback()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'feedback' => $faker->sentence,
+                'status_id' => rand(1, 3),
+            ]);
+
             $laporan->no_sprin()->create([
                 'uuid' => str()->uuid(),
                 'laporan_uuid' => $laporan->uuid,
@@ -194,8 +201,8 @@ class DhasboardController extends Controller
             $laporan->surat_perintah()->create([
                 'uuid' => str()->uuid(),
                 'laporan_uuid' => $laporan->uuid,
-                'berlaku' => $now->copy()->format('Y-m-d'),
-                'hingga' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
+                'berlaku' => $now->copy()->subDays(rand(1, 15))->format('Y-m-d'),
+                'hingga' => $now->copy()->subDays(rand(1, 15))->format('Y-m-d'),
             ]);
         }
 
@@ -208,6 +215,13 @@ class DhasboardController extends Controller
                 'created_at' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
             ]);
 
+            $laporan->feedback()->create([
+                'uuid' => str()->uuid(),
+                'laporan_uuid' => $laporan->uuid,
+                'feedback' => $faker->sentence,
+                'status_id' => rand(1, 3),
+            ]);
+
             $laporan->no_sprin()->create([
                 'uuid' => str()->uuid(),
                 'laporan_uuid' => $laporan->uuid,
@@ -256,7 +270,7 @@ class DhasboardController extends Controller
             $laporan->surat_perintah()->create([
                 'uuid' => str()->uuid(),
                 'laporan_uuid' => $laporan->uuid,
-                'berlaku' => $now->copy()->format('Y-m-d'),
+                'berlaku' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
                 'hingga' => $now->copy()->addDays(rand(1, 15))->format('Y-m-d'),
             ]);
         }
