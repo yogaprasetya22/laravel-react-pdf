@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'uuid' => str()->uuid(),
             'name' => 'superadmin',
-            'email' => 'superadmin@gmai.com',
+            'email' => 'superadmin@gmail.com',
             'password' => bcrypt('asdasdasd'),
             'no_telp' => '08123456789',
             'alamat' => 'Jl. Raya',

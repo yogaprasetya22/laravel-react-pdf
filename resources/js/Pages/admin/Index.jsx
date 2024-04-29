@@ -207,10 +207,15 @@ export default function Index({ data: data_table }) {
                                     : moment(berlaku).format("dddd")}{" "}
                                 {moment(berlaku).format("dddd") !==
                                     moment(hingga).format("dddd") && "/"}{" "}
-                                {moment(hingga).format("dddd") ===
-                                moment().format("dddd")
-                                    ? "Hari Ini"
-                                    : moment(hingga).format("dddd")}
+                                {moment(berlaku).format("dddd") !==
+                                    moment(hingga).format("dddd") && (
+                                    <>
+                                        {moment(hingga).format("dddd") ===
+                                        moment().format("dddd")
+                                            ? "Hari Ini"
+                                            : moment(hingga).format("dddd")}
+                                    </>
+                                )}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">

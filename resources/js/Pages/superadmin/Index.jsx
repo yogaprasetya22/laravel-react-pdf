@@ -8,7 +8,12 @@ import ReactPaginate from "react-paginate";
 
 export default function Index({ data: data_table }) {
     const [data, setData] = useState(data_table);
-    const [date, setDate] = useState(moment().format("YYYY-MM-DD").toString());
+    const [hingga, setHingga] = useState(
+        moment().format("YYYY-MM-DD").toString()
+    );
+    const [berlaku, setBerlaku] = useState(
+        moment().format("YYYY-MM-DD").toString()
+    );
     const [currentData, setCurrentData] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [currentItems, setCurrentItems] = useState([]);
@@ -19,11 +24,16 @@ export default function Index({ data: data_table }) {
 
     useEffect(() => {
         setCurrentData(
-            data.filter((item) => {
-                return moment(item.created_at).format("YYYY-MM-DD") === date;
+            data_table.filter((item) => {
+                return (
+                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") >=
+                        berlaku &&
+                    moment(item.surat_perintah.berlaku).format("YYYY-MM-DD") <=
+                        hingga
+                );
             })
         );
-    }, [data, date]);
+    }, [data, berlaku, hingga]);
 
     useEffect(() => {
         setLoading(true);
@@ -68,9 +78,43 @@ export default function Index({ data: data_table }) {
                 item.no_sprin.kategori
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
-                item.no_sprin.tahun.toLowerCase().includes(search.toLowerCase())
+                item.no_sprin.tahun
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                [
+                    item.no_sprin.kode,
+                    item.no_sprin.unit,
+                    item.no_sprin.kategori,
+                    item.no_sprin.tahun,
+                ]
+                    .join("/")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.berlaku)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.surat_perintah.hingga)
+                    .format("LL")
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                moment(item.created_at)
+                    .fromNow()
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) ||
+                item.feedback?.status?.name_status
+                    .toLowerCase()
+                    .includes(search.toLowerCase())
             );
         });
+        setBerlaku(
+            moment(filteredData[0].surat_perintah.berlaku).format("YYYY-MM-DD")
+        );
+        setHingga(
+            moment(filteredData[0].surat_perintah.berlaku)
+                .add(1, "days")
+                .format("YYYY-MM-DD")
+        );
         setData(filteredData);
     };
 
@@ -78,7 +122,7 @@ export default function Index({ data: data_table }) {
         <Layout>
             <div className="flex flex-col gap-5">
                 <div className="flex w-full justify-between gap-5">
-                    <div className="w-full bg-blue-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-pink-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
                             className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
                             style={{
@@ -86,12 +130,12 @@ export default function Index({ data: data_table }) {
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-400">
-                                {moment(date).format("YYYY")}
+                            <p className="text-md font-extrabold text-gray-500">
+                                {moment(berlaku).format("YYYY")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
+                            <p className="text-xs font-semibold text-white">
                                 tahun ini
                             </p>
                             <p className="text-3xl font-semibold">
@@ -100,13 +144,13 @@ export default function Index({ data: data_table }) {
                                         (item) =>
                                             moment(item.created_at).format(
                                                 "YYYY"
-                                            ) === moment(date).format("YYYY")
+                                            ) === moment(berlaku).format("YYYY")
                                     ).length
                                 }
                             </p>
                         </div>
                     </div>
-                    <div className="w-full bg-green-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-blue-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
                             className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
                             style={{
@@ -114,66 +158,112 @@ export default function Index({ data: data_table }) {
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-400">
-                                {moment(date).format("MMMM")}
+                            <p className="text-md font-extrabold text-gray-500 min-w-[7rem]">
+                                {moment(berlaku).format("MMMM")}{" "}
+                                {moment(berlaku).format("MMMM") !==
+                                    moment(hingga).format("MMMM") && "/"}{" "}
+                                {moment(berlaku).format("MMMM") ===
+                                moment(hingga).format("MMMM")
+                                    ? ""
+                                    : moment(hingga).format("MMMM")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
+                            <p className="text-xs font-semibold text-white">
                                 bulan ini
                             </p>
                             <p className="text-3xl font-semibold">
                                 {
-                                    data_table.filter(
-                                        (item) =>
-                                            moment(item.created_at).format(
-                                                "MMMM"
-                                            ) === moment(date).format("MMMM")
-                                    ).length
+                                    data_table.filter((item) => {
+                                        return (
+                                            moment(
+                                                item.surat_perintah.berlaku
+                                            ).format("MMMM") ===
+                                                moment(berlaku).format(
+                                                    "MMMM"
+                                                ) ||
+                                            moment(
+                                                item.surat_perintah.berlaku
+                                            ).format("MMMM") ===
+                                                moment(hingga).format("MMMM")
+                                        );
+                                    }).length
                                 }
                             </p>
                         </div>
                     </div>
-                    <div className="w-full bg-red-500 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4">
+                    <div className="w-full bg-yellow-500/80 flex flex-row items-center text-white font-semibold text-lg rounded-md p-2 gap-4  shadow-md">
                         <div
-                            className="bg-white py-5 p-2 flex flex-col justify-center items-center pr-6 shadow-2xl"
+                            className="bg-white py-5 p-2 flex flex-col justify-center pr-6 shadow-2xl w-full"
                             style={{
                                 clipPath:
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-400">
-                                {moment(date).format("dddd")}
+                            <p className="text-md font-extrabold text-gray-500">
+                                {moment(berlaku).format("dddd") ===
+                                moment().format("dddd")
+                                    ? "Hari Ini"
+                                    : moment(berlaku).format("dddd")}{" "}
+                                {moment(berlaku).format("dddd") !==
+                                    moment(hingga).format("dddd") && "/"}{" "}
+                                {moment(berlaku).format("dddd") !==
+                                    moment(hingga).format("dddd") && (
+                                    <>
+                                        {moment(hingga).format("dddd") ===
+                                        moment().format("dddd")
+                                            ? "Hari Ini"
+                                            : moment(hingga).format("dddd")}
+                                    </>
+                                )}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
-                            <p className="text-xs font-semibold text-gray-200">
+                            <p className="text-xs font-semibold text-white">
                                 hari ini
                             </p>
                             <p className="text-3xl font-semibold">
-                                {
-                                    currentData.filter(
-                                        (item) =>
-                                            moment(item.created_at).format(
-                                                "dddd"
-                                            ) === moment(date).format("dddd")
-                                    ).length
-                                }
+                                {currentData.length}
                             </p>
                         </div>
                     </div>
                 </div>
-                <div className="w-full bg-white">
+                <div className="w-full bg-white rounded-md shadow-md">
                     <div className="overflow-x-auto">
                         <div className="w-full flex justify-between gap-5">
                             <div className="flex gap-2 px-5 py-3 items-center">
                                 {/* input type date */}
-                                <input
-                                    type="date"
-                                    className="input input-bordered max-w-[10rem]"
-                                    value={date}
-                                    onChange={(e) => setDate(e.target.value)}
-                                />
+                                <label
+                                    htmlFor="berlaku"
+                                    className="flex flex-row items-center gap-2"
+                                >
+                                    <span>Berlaku :</span>
+                                    <input
+                                        id="berlaku"
+                                        type="date"
+                                        className="input input-bordered "
+                                        value={berlaku}
+                                        onChange={(e) =>
+                                            setBerlaku(e.target.value)
+                                        }
+                                    />
+                                </label>
+                                <label
+                                    htmlFor="hingga"
+                                    className="flex flex-row items-center gap-2"
+                                >
+                                    <span>Hingga :</span>
+                                    <input
+                                        id="hingga"
+                                        type="date"
+                                        className="input input-bordered "
+                                        value={hingga}
+                                        onChange={(e) =>
+                                            setHingga(e.target.value)
+                                        }
+                                        min={berlaku}
+                                    />
+                                </label>
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <input
                                         type="text"
@@ -216,7 +306,7 @@ export default function Index({ data: data_table }) {
                             </div>
                         </div>
                         <table className="table">
-                            <thead className="bg-gray-600">
+                            <thead className="bg-green-500">
                                 <tr className="font-bold text-lg text-white">
                                     <th className="text-center">No Sprin</th>
                                     <th className="text-center">Name</th>
@@ -226,7 +316,7 @@ export default function Index({ data: data_table }) {
                                         Tanggal Upload
                                     </th>
                                     <th className="text-center">Status</th>
-                                    <th className="text-center">detail</th>
+                                    <th className="text-center">Detail</th>
                                 </tr>
                             </thead>
                             {currentItems.map((item, index) => (
@@ -294,7 +384,7 @@ export default function Index({ data: data_table }) {
                                         </td>
                                         <td className="border-x">
                                             <Link
-                                                href={`/superadmin/detail/${item.uuid}`}
+                                                href={`/history/${item.uuid}`}
                                                 className="btn btn-ghost btn-md "
                                             >
                                                 <i className="text-green-500 text-xl fas fa-eye"></i>

@@ -25,7 +25,10 @@ class SuperadminController extends Controller
             'untuk',
             'surat_perintah',
             'feedback.status',
-        ])->latest()->get();
+        ])->whereHas('feedback', function ($query) {
+            $query->where('status_id', 2);
+        })->latest()->get();
+
 
         return Inertia::render('superadmin/Index', [
             'title' => 'Super Admin',
