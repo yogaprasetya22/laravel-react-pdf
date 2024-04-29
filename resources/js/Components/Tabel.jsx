@@ -122,7 +122,7 @@ export default function Tabel({ data: data_table }) {
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
                 moment(item.created_at)
-                    .fromNow()
+                    .format("LL")
                     .toLowerCase()
                     .includes(search.toLowerCase()) ||
                 item.feedback?.status?.name_status
@@ -389,7 +389,9 @@ export default function Tabel({ data: data_table }) {
                                     </td>
                                     <td>
                                         <p className="font-bold">
-                                            {moment(item?.created_at).fromNow()}
+                                            {moment(item?.created_at).format(
+                                                "LL"
+                                            )}
                                         </p>
                                     </td>
                                     <td>

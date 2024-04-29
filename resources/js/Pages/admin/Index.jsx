@@ -17,6 +17,8 @@ export default function Index({ data: data_table }) {
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(5);
 
+    console.log(data);
+
     useEffect(() => {
         setCurrentData(
             data.filter((item) => {
@@ -97,6 +99,7 @@ export default function Index({ data: data_table }) {
                     .includes(search.toLowerCase())
             );
         });
+        setDate(moment(filteredData[0].created_at).format("YYYY-MM-DD"));
         setData(filteredData);
     };
 
@@ -168,11 +171,17 @@ export default function Index({ data: data_table }) {
                                     "polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%)",
                             }}
                         >
-                            <p className="text-md font-extrabold text-gray-500 min-w-[4rem]">
+                            <p className="text-md font-extrabold text-gray-500 min-w-[8rem]">
                                 {moment(date).format("dddd") ===
                                 moment().format("dddd")
                                     ? "Hari Ini"
-                                    : moment(date).format("dddd")}
+                                    : moment(date).format("dddd")}{" "}
+                                {moment(date).format("dddd") !==
+                                    moment().format("dddd") && "/"}
+                                {moment(date).format("dddd") ===
+                                moment().format("dddd")
+                                    ? ""
+                                    : moment(date).format("DD")}
                             </p>
                         </div>
                         <div className="w-full flex flex-col justify-center items-center ">
