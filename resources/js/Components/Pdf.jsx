@@ -326,11 +326,7 @@ export default function MyPdf({ data, tamplate }) {
                                                 kepada{" "}
                                                 {tamplate?.tujuan_laporan === ""
                                                     ? "..."
-                                                    : tamplate?.tujuan_laporan}{" "}
-                                                Polres{" "}
-                                                {tamplate?.polres === ""
-                                                    ? "..."
-                                                    : tamplate?.polres}
+                                                    : tamplate?.tujuan_laporan}
                                                 .
                                             </Text>
                                         </View>
@@ -395,8 +391,7 @@ export default function MyPdf({ data, tamplate }) {
                                         style={tw("border-b border-black")}
                                     ></Text>
                                 </View>
-                                <Text style={tw("text-sm font-bold")}>
-                                    NRP.{" "}
+                                <Text style={tw("text-sm font-bold uppercase")}>
                                     {tamplate?.nrp_pemimpin_unit === ""
                                         ? "..."
                                         : tamplate?.nrp_pemimpin_unit}

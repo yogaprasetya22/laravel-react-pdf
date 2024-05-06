@@ -41,7 +41,7 @@ export default function PdfTamplate({ data, url }) {
                                 "text-sm font-bold text-center uppercase text-green-600"
                             )}
                         >
-                            Polres {data?.polres === "" ? "..." : data?.polres}
+                            {data?.polres === "" ? "..." : data?.polres}
                         </Text>
                         <Text style={tw("border-b border-black")}></Text>
                     </View>
@@ -206,11 +206,7 @@ export default function PdfTamplate({ data, url }) {
                                         perintah ini melaporkan kepada{" "}
                                         {data?.tujuan_laporan === ""
                                             ? "..."
-                                            : data?.tujuan_laporan}{" "}
-                                        Polres{" "}
-                                        {data?.polres === ""
-                                            ? "..."
-                                            : data?.polres}
+                                            : data?.tujuan_laporan}
                                         .
                                     </Text>
                                 </View>
@@ -226,73 +222,80 @@ export default function PdfTamplate({ data, url }) {
                     </View>
                     <View style={tw("flex w-full flex-row justify-end pt-4")}>
                         <View style={tw("flex flex-col items-start")}>
-                            <View style={tw("flex flex-col gap-1")}>
-                                <Text
-                                    style={tw(
-                                        "text-sm font-bold text-green-600"
-                                    )}
-                                >
-                                    Dikeluarkan di :{" "}
-                                    {data?.polres === "" ? "..." : data?.polres}
-                                </Text>
-                                <View style={tw("flex flex-row gap-3")}>
-                                    <Text style={tw("text-sm font-bold")}>
-                                        Pada Tanggal :
-                                    </Text>
-                                    <Text
-                                        style={tw(
-                                            "underline text-sm font-bold"
-                                        )}
-                                    >
-                                        {moment(new Date()).format("LL")}
-                                    </Text>
-                                </View>
-                                <Text
-                                    style={tw(
-                                        "text-sm font-bold uppercase text-green-600"
-                                    )}
-                                >
-                                    {data?.nama_unit === ""
-                                        ? "..."
-                                        : data?.nama_unit}
-                                </Text>
-                            </View>
-                            {url && (
-                                <View
-                                    style={tw(
-                                        "w-full flex justify-center items-center"
-                                    )}
-                                >
-                                    <Image
-                                        src={url}
-                                        style={tw("w-[7rem] h-[3.5rem]")}
-                                    />
-                                </View>
-                            )}
-                            <View style={tw("flex flex-col gap-1")}>
-                                <View style={tw("flex flex-col")}>
+                            {" "}
+                            <View
+                                style={tw("flex flex-col items-start gap-14")}
+                            >
+                                <View style={tw("flex flex-col gap-1")}>
                                     <Text
                                         style={tw(
                                             "text-sm font-bold text-green-600"
                                         )}
                                     >
-                                        {data?.pemimpin_unit === ""
+                                        Dikeluarkan di :{" "}
+                                        {data?.polres === ""
                                             ? "..."
-                                            : data?.pemimpin_unit}
+                                            : data?.polres}
                                     </Text>
+                                    <View style={tw("flex flex-row gap-3")}>
+                                        <Text style={tw("text-sm font-bold")}>
+                                            Pada Tanggal :
+                                        </Text>
+                                        <Text
+                                            style={tw(
+                                                "underline text-sm font-bold"
+                                            )}
+                                        >
+                                            {moment(new Date()).format("LL")}
+                                        </Text>
+                                    </View>
                                     <Text
-                                        style={tw("border-b border-black")}
-                                    ></Text>
+                                        style={tw(
+                                            "text-sm font-bold uppercase text-green-600"
+                                        )}
+                                    >
+                                        {data?.nama_unit === ""
+                                            ? "..."
+                                            : data?.nama_unit}
+                                    </Text>
                                 </View>
-                                <Text
-                                    style={tw(
-                                        "text-sm font-bold text-green-600"
-                                    )}
-                                >
-                                    {data?.nrp_pemimpin_unit === ""
-                                        ? "..."
-                                        : data?.nrp_pemimpin_unit}
-                                </Text>
+                                {url && (
+                                    <View
+                                        style={tw(
+                                            "w-full flex justify-center items-center"
+                                        )}
+                                    >
+                                        <Image
+                                            src={url}
+                                            style={tw("w-[7rem] h-[3.5rem]")}
+                                        />
+                                    </View>
+                                )}
+                                <View style={tw("flex flex-col gap-1")}>
+                                    <View style={tw("flex flex-col")}>
+                                        <Text
+                                            style={tw(
+                                                "text-sm font-bold text-green-600"
+                                            )}
+                                        >
+                                            {data?.pemimpin_unit === ""
+                                                ? "..."
+                                                : data?.pemimpin_unit}
+                                        </Text>
+                                        <Text
+                                            style={tw("border-b border-black")}
+                                        ></Text>
+                                    </View>
+                                    <Text
+                                        style={tw(
+                                            "text-sm font-bold text-green-600 uppercase"
+                                        )}
+                                    >
+                                        {data?.nrp_pemimpin_unit === ""
+                                            ? "..."
+                                            : data?.nrp_pemimpin_unit}
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                     </View>

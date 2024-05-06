@@ -32,7 +32,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                 <Form className="w-full flex gap-5 flex-col">
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Title
                             </label>
                             <FildArrayTextAreas
@@ -53,7 +53,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Polres
                             </label>
                             <FildArrayTextAreas
@@ -74,7 +74,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Tujuan Laporan
                             </label>
                             <FildArrayTextAreas
@@ -101,7 +101,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Dikeluarkan
                             </label>
                             <FildArrayTextAreas
@@ -122,7 +122,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Nama Unit
                             </label>
                             <FildArrayTextAreas
@@ -143,7 +143,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Pemimpin Unit
                             </label>
                             <FildArrayTextAreas
@@ -170,8 +170,8 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
-                                NRP Pemimpin Unit
+                            <label className="text-lg font-semibold">
+                                NRP/Pangkat Pemimpin Unit
                             </label>
                             <FildArrayTextAreas
                                 name="nrp_pemimpin_unit"
@@ -188,7 +188,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                                     )
                                 }
                                 value={values.nrp_pemimpin_unit}
-                                placeholder="Enter NRP Pemimpin Unit"
+                                placeholder="Enter NRP/Pangkat Pemimpin Unit"
                             />
                             <ErrorMessage
                                 name="nrp_pemimpin_unit"
@@ -197,7 +197,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Tembusan 1
                             </label>
                             <FildArrayTextAreas
@@ -218,7 +218,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Tembusan 2
                             </label>
                             <FildArrayTextAreas
@@ -239,7 +239,7 @@ export default function FormLaporan({ formValues, handleFormChange }) {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-xl font-semibold">
+                            <label className="text-lg font-semibold">
                                 Tembusan 3
                             </label>
                             <FildArrayTextAreas
